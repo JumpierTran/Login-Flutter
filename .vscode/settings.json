@@ -1,0 +1,9 @@
+{
+  "files.exclude": {
+    "windows": true,
+    "pubspec.lock": true,
+    ".metadata": true,
+    "macos": true,
+    "linux": true
+  }
+}
