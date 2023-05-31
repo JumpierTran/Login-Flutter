@@ -1,15 +1,47 @@
 import 'package:camera_app/service/api.dart';
+import 'package:camera_app/service/apiAuth.dart';
 import 'package:flutter/material.dart';
 
-class homeSignUp extends StatelessWidget {
+class homeSignUp extends StatefulWidget {
   homeSignUp({super.key});
-  final numberController = TextEditingController();
-  final passwordController = TextEditingController();
-  final retypepasswordController = TextEditingController();
-  final usernameController = TextEditingController();
-  final addressController = TextEditingController();
 
-  // final api = DemoApi();
+  @override
+  State<homeSignUp> createState() => _homeSignUpState();
+}
+
+class _homeSignUpState extends State<homeSignUp> {
+  final _formkey = GlobalKey<FormState>();
+  final TextEditingController phoneController = TextEditingController();
+
+  final TextEditingController passwordController = TextEditingController();
+
+  final TextEditingController retypepasswordController =
+      TextEditingController();
+
+  final TextEditingController fullNameController = TextEditingController();
+
+  final TextEditingController addressController = TextEditingController();
+
+  void handleRegister() async {
+    ApiAuth().setupInterceptors();
+    try {
+      if (_formkey.currentState!.validate()) {
+        String address = addressController.text;
+        String fullname = fullNameController.text;
+        String password = passwordController.text;
+        String retypePassword = password;
+        String phone = phoneController.text;
+        await ApiAuth().register(
+            address: address,
+            fullname: fullname,
+            password: password,
+            retypePassword: retypePassword,
+            phone: phone);
+      } else {}
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +67,7 @@ class homeSignUp extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               MyNumberField(
-                  controller: numberController,
+                  controller: phoneController,
                   hintText: 'Số điện thoại',
                   obscureText: false),
               const SizedBox(height: 20),
@@ -50,7 +82,7 @@ class homeSignUp extends StatelessWidget {
                   obscureText: true),
               const SizedBox(height: 20),
               MyTextField(
-                  controller: usernameController,
+                  controller: fullNameController,
                   hintText: 'Họ và Tên',
                   obscureText: false),
               const SizedBox(height: 20),
@@ -59,9 +91,7 @@ class homeSignUp extends StatelessWidget {
                   hintText: 'Địa Chỉ',
                   obscureText: false),
               const SizedBox(height: 20),
-              Mybutton(ontap: () async {
-                // await api.dioLogin();
-              }),
+              ButtonPressed(onPress: handleRegister),
               const SizedBox(height: 10),
               SignUpWith(),
               const SizedBox(height: 10),
@@ -99,7 +129,7 @@ class MyTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
-      child: TextField(
+      child: TextFormField(
         controller: controller,
         obscureText: obscureText,
         decoration: InputDecoration(
@@ -154,35 +184,23 @@ class MyNumberField extends StatelessWidget {
   }
 }
 
-class Mybutton extends StatelessWidget {
-  const Mybutton({super.key, required this.ontap});
-
-  final Function()? ontap;
-
+class ButtonPressed extends StatelessWidget {
+  ButtonPressed({super.key, required this.onPress});
+   VoidCallback onPress;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: ontap,
-      child: Container(
-        padding: const EdgeInsets.all(18.0),
-        margin: const EdgeInsets.symmetric(horizontal: 20.0),
-        decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(7),
-        ),
-        child: Center(
-          child: Column(
-            children: [
-              Text(
-                "Đăng ký",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-        ),
+    return Center(
+      child: ElevatedButton(
+        onPressed: () {
+          onPress = onPress;
+          Navigator.pushNamed(context, "/");
+        },
+        style: ElevatedButton.styleFrom(
+            minimumSize: Size(365, 50),
+            backgroundColor: Color.fromARGB(255, 36, 69, 92),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10))),
+        child: Text('Đăng nhập'),
       ),
     );
   }

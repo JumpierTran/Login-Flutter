@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:camera_app/routes/router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() {
+void main() async {
   runApp(loginPage());
 }
 
@@ -23,7 +24,6 @@ class _loginPageState extends State<loginPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // home: homeLoginPage(),
       initialRoute: '/',
       onGenerateRoute: RouterFluro.fluroRouter.generator,
     );

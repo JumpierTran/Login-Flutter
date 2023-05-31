@@ -1,4 +1,6 @@
+import 'package:camera_app/service/apiAuth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CameraPage extends StatefulWidget {
   const CameraPage({super.key});
@@ -12,21 +14,46 @@ class _CameraPageState extends State<CameraPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(
-          Icons.camera,
-          color: Colors.blueAccent,
+        actions: [
+          IconButton(
+              onPressed: () {
+                ApiAuth().logoutUser();
+              },
+              icon: Icon(Icons.logout))
+        ],
+        title: Text(
+          'My Camera',
+          style: TextStyle(fontSize: 23),
+          textAlign: TextAlign.center,
         ),
       ),
-      body:  Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(Icons.camera_indoor_rounded),
-            Expanded(child: Text('Camera Red')),
-            Icon(Icons.camera_indoor_rounded),
-            Expanded(child: Text('Camera Yellow')),
-            Icon(Icons.camera_indoor_rounded),
-            Expanded(child: Text('Camera Green')),
+            Text(
+              'Welcome App Camera',
+              style: TextStyle(color: const Color.fromARGB(1, 45, 54, 23)),
+            ),
+            Icon(Icons.camera_alt),
+            Expanded(
+                child: Text(
+              'Camera Red',
+              style: TextStyle(backgroundColor: Colors.red),
+            )),
+            Icon(Icons.camera_alt),
+            Expanded(
+                child: Text(
+              'Camera Yellow',
+              style: TextStyle(backgroundColor: Colors.yellowAccent),
+            )),
+            Icon(Icons.camera_alt),
+            Expanded(
+                child: Text(
+              'Camera Green',
+              style: TextStyle(backgroundColor: Colors.greenAccent),
+            )),
           ],
         ),
       ),

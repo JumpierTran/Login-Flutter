@@ -1,70 +1,123 @@
-import 'dart:js';
-
-import 'package:camera_app/page/CameraPage.dart';
-import 'package:flutter/material.dart';
+import 'package:camera_app/auth/auth_model.dart';
 import 'package:dio/dio.dart';
-import 'package:camera_app/interceptors/dio_interceptor.dart';
 import 'package:camera_app/service/Store.dart';
 import 'package:fluro/fluro.dart';
+import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<void> fetchData() async {
-  try {
-    Dio dio = Dio();
-    String url = "https://app.mekongsmartcam.vn/edge/";
+Future<void> loginUser(String phone, String password) async {
+  var url =
+      'https://app.mekongsmartcam.vn/edge/vshome/me/login'; // URL của API đăng nhập
 
-    Response response = await dio.get(url);
+  var data = {
+    'phone': phone,
+    'password': password,
+  };
+
+  var dio = Dio();
+
+  try {
+    var response = await dio.post(url, data: data);
+
     if (response.statusCode == 200) {
-      Map<String, dynamic> data = response.data;
-      print(data);
+      print('Đăng nhập thành công');
+      var session = response.headers['session']?.first;
+      if (session != null) {
+        dio.options.headers['session'] = session;
+        // Gửi yêu cầu API tiếp theo sử dụng session
+        await fetchUserInfoLogin(dio);
+      } else {
+        print('Không tìm thấy session trong phản hồi');
+      }
     } else {
-      print("Lỗi khi gửi yêu cầu GET: ${response.statusCode}");
+      print('Đăng nhập thất bại. Mã lỗi: ${response.statusCode}');
     }
   } catch (e) {
-    print("Đã xảy ra lỗi: $e");
+    print('Đăng nhập thất bại. Lỗi: $e');
   }
 }
 
-// void postData() async {
-//   try {
-//     Dio dio = Dio();
-//     String url = "https://app.mekongsmartcam.vn/edge/vshome/me/login";
+Future<void> fetchUserInfoLogin(Dio dio) async {
+  var url =
+      'https://app.mekongsmartcam.vn/edge/vshome/me/userinfo'; // URL của API lấy thông tin người dùng
 
-//     Map<String, dynamic> jsonData = {
-//       // Thay đổi đây để phù hợp với dữ liệu JSON cần gửi
-//       "phone": "0123456789",
-//       "password": "Vnpt@123",
-//     };
+  try {
+    var response = await dio.get(url);
 
-//     Response response = await dio.post(url, data: jsonData);
+    if (response.statusCode == 200) {
+      var userInfo = response.data;
+      AuthModel auth = AuthModel.fromJson(response.data);
 
-//     if (response.statusCode == 200) {
-//       // Yêu cầu POST thành công
-//       Map<String, dynamic> data = response.data;
+      print(auth.id);
+      print(auth.phone);
+      print(auth.customerCode);
+      print('Thông tin người dùng: $userInfo');
+    } else {
+      print(
+          'Lấy thông tin người dùng thất bại. Mã lỗi: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Lấy thông tin người dùng thất bại. Lỗi: $e');
+  }
+}
 
-//       // Kiểm tra session trong dữ liệu trả về
-//       if (data.containsKey('session')) {
-//         // Lưu session vào shared preferences
-//         String session = data['session'];
-//         await _saveSession(session);
+Future<void> registerUser(
+  String phone,
+  String password,
+  String fullName,
+  String address,
+) async {
+  var url =
+      'https://app.mekongsmartcam.vn/edge/vshome/api/vshome/users'; // URL của API đăng ký
 
-//         // Tiến hành chuyển hướng tới trang chủ của app
-//         Navigator.push(context, MaterialPageRoute(builder: (context) =>CameraPage()));
-//       } else {
-//         // Hiển thị thông báo "no_session"
-//         print('no_session');
-//       }
-//     } else {
-//       // Xử lý lỗi khi gửi yêu cầu POST
-//       print('Lỗi khi gửi yêu cầu POST: ${response.statusCode}');
-//     }
-//   } catch (e) {
-//     // Xử lý lỗi khi gọi API
-//     print("Đã xảy ra lỗi: $e");
-//   }
-// }
+  var data = {
+    'phone': phone,
+    'password': password,
+    'fullName': fullName,
+    'address': address,
+  };
 
-// Future<void> _saveSession(String action) async {
-//   final preferences = await SharedPreferences.getInstance();
-//   await preferences.setString('session', session);
-// }
+  var dio = Dio();
+
+  try {
+    var response = await dio.post(
+      url,
+      data: data,
+    );
+
+    if (response.statusCode == 200) {
+      print('Đăng ký thành công');
+      var session = response.headers['session'];
+      if (session != null) {
+        dio.options.headers['session'] = session;
+        // Sử dụng session cho các yêu cầu API tiếp theo
+        await fetchUserInfoResgister(dio);
+      } else {
+        print('Không tìm thấy session trong phản hồi');
+      }
+    } else {
+      print('Đăng ký thất bại. Mã lỗi: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Đăng ký thất bại. Lỗi: $e');
+  }
+}
+
+Future<void> fetchUserInfoResgister(Dio dio) async {
+  var url =
+      'https://app.mekongsmartcam.vn/edge/vshome/api/vshome/users'; // URL của API lấy thông tin người dùng
+
+  try {
+    var response = await dio.get(url);
+
+    if (response.statusCode == 200) {
+      var userInfo = response.data;
+      print('Thông tin người dùng: $userInfo');
+    } else {
+      print(
+          'Lấy thông tin người dùng thất bại. Mã lỗi: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Lấy thông tin người dùng thất bại. Lỗi: $e');
+  }
+}
