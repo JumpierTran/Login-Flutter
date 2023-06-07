@@ -1,0 +1,7 @@
+{
+  "editor.codeActionsOnSave": {},
+  "files.exclude": {
+    "**/.dart": true
+  }
+
+}
