@@ -39,7 +39,7 @@ class _DetailMyCameraState extends State<DetailMyCamera> {
               child: Text('Chi tiết Video',style: 
               TextStyle(
                 fontSize: 23,
-                color: Colors.grey.shade600),),
+                color: Colors.black),),
             )
           ],
         ),
@@ -51,7 +51,7 @@ class _DetailMyCameraState extends State<DetailMyCamera> {
       {required icon, required label}) {
     return GestureDetector(
       onTap: () {
-        if (icon == IconlyLight.home) {
+        if (icon == IconlyLight.image) {
           Navigator.pushNamed(context, '/images');
         } else if (icon == IconlyLight.camera) {
           Navigator.pushNamed(context, '/devices');

@@ -51,7 +51,7 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
           colors: [
-            Colors.white54,
+            Colors.white,
             Colors.lightBlue,
           ],
         ),

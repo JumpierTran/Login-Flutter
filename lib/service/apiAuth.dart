@@ -24,20 +24,37 @@ class ApiAuth {
       throw Exception(e);
     }
   }
+
+  Future<Response> registerUser(
+      String phone, String password,String retypepassword, String fullname, String address) async {
+    final url = '$baseUrl+';
+    final data = {
+      'phone': phone,
+      'password': password,
+      'retypepassword': retypepassword,
+      'fullname': fullname,
+      'address': address,
+    };
+    try {
+      final response = await _dio.post(url, queryParameters: data);
+      return response;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 }
 
 class AuthInterceptor extends Interceptor {
   AuthModel? authModel;
   SharedPreferences? prefs;
 
-  AuthInterceptor() {
+  AuthInterceptor(){
     initPrefs();
   }
 
-  void initPrefs() async {
-    prefs = await SharedPreferences.getInstance();
+  Future<void> initPrefs() async {
+  prefs = await SharedPreferences.getInstance();
   }
-
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     if (authModel != null && authModel!.session != null) {
@@ -53,7 +70,6 @@ class AuthInterceptor extends Interceptor {
     final sessionData = responseData['session'] as Map<String, dynamic>?;
     if (sessionData != null) {
       authModel?.session = Session.fromJson(sessionData);
-      prefs?.setString('session', authModel!.session as String);
     }
     super.onResponse(response, handler);
   }
