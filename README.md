@@ -16,5 +16,9 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 
+<<<<<<< HEAD
 SignInPage, SignUpPage and CameraPage About Ui Done 
 
+=======
+SignInPage, SignUpPage and CameraPage About Ui Done But Logic Authetication no done
+>>>>>>> 5a2215ccedc875b18d977d860fbbfbffc554f9ca
