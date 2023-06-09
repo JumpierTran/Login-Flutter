@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:camera_app/routes/router.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
-  runApp(loginPage());
+  runApp(HomePage());
 }
 
-class loginPage extends StatefulWidget {
-  const loginPage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<loginPage> createState() => _loginPageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _loginPageState extends State<loginPage> {
+class _HomePageState extends State<HomePage> {
   @override
   initState() {
     super.initState();

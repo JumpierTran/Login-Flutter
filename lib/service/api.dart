@@ -1,9 +1,6 @@
 import 'package:camera_app/auth/auth_model.dart';
 import 'package:dio/dio.dart';
-import 'package:camera_app/service/Store.dart';
 import 'package:fluro/fluro.dart';
-import 'package:flutter/rendering.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> loginUser(String phone, String password) async {
   var url =

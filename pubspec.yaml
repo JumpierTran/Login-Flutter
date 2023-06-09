@@ -18,7 +18,9 @@ dependencies:
   shared_preferences: ^2.1.1
   dio: ^5.1.2
   flutter_bloc: ^8.1.3
-
+  fluttertoast: ^8.2.2
+  equatable: ^2.0.5
+  iconly: ^1.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -35,5 +37,8 @@ flutter:
     - assets/image/imageFacebook.png
     - assets/image/imageGoogle.png
     - assets/image/imageInstagram.png
+    - assets/image/camera1.png
+    - assets/image/camera2.png
+    - assets/image/camera3.png
 
   
