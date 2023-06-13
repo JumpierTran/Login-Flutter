@@ -18,6 +18,8 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
   final TextEditingController addressController = TextEditingController();
   final api = ApiAuth();
 
+  bool isPasswordVisible = false;
+
   void handleRegister() async {
     String address = addressController.text;
     String fullname = fullNameController.text;
@@ -53,6 +55,7 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
           colors: [
             Colors.white,
             Colors.lightBlue,
+            Colors.cyanAccent,
           ],
         ),
       ),
@@ -79,108 +82,22 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
                     left: 35),
                 child: Column(
                   children: [
-                    SizedBox(height: 30),
-                    TextFormField(
-                      controller: addressController,
-                      decoration: InputDecoration(
-                          fillColor: Colors.white10,
-                          filled: true,
-                          labelText: 'Địa chỉ',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.white)),
-                          labelStyle: TextStyle(color: Colors.black)
-                          ),
-                    ),
                     SizedBox(height: 20),
-                    TextFormField(
-                      controller: fullNameController,
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                          fillColor: Colors.white10,
-                          filled: true,
-                          labelText: 'Họ và Tên',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.white)),
-                          labelStyle: TextStyle(color: Colors.black)
-                          ),
-                    ),
+                    addressTextField(),
                     SizedBox(height: 20),
-                    TextFormField(
-                      controller: phoneController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          fillColor: Colors.white10,
-                          filled: true,
-                          labelText: 'Phone',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.white)),
-                          labelStyle: TextStyle(color: Colors.black)
-                              ),
-                    ),
+                    fullnameTextField(),
                     SizedBox(height: 20),
-                    TextFormField(
-                      controller: passwordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                          fillColor: Colors.white10,
-                          filled: true,
-                          labelText: 'Mật khẩu',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.white)),
-                          labelStyle: TextStyle(color: Colors.black)
-                          ),
-                    ),
+                    phoneTextField(),
                     SizedBox(height: 20),
-                    TextFormField(
-                      controller: retypepasswordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                          fillColor: Colors.white10,
-                          filled: true,
-                          labelText: 'Nhập lại Mật khẩu',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.white24)),
-                          labelStyle: TextStyle(color: Colors.black)
-                          ),
-                    ),
+                    passwordTextField(),
+                    SizedBox(height: 20),
+                    retypepasswordTextField(),
                     SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundColor: Colors.black,
-                          child: IconButton(
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/');
-                              },
-                              icon: Icon(Icons.arrow_back)),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            handleRegister();
-                          },
-                          child: Text('Đăng Ký',
-                              style: TextStyle(
-                                  fontSize: 27,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black)),
-                        ),
+                        circleAvatarButton(),
+                        ButtonRegister(),
                       ],
                     ),
                   ],
@@ -190,6 +107,133 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget addressTextField() {
+    return TextFormField(
+      controller: addressController,
+      decoration: InputDecoration(
+          fillColor: Colors.white10,
+          filled: true,
+          labelText: 'Địa chỉ',
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          focusedBorder:
+              OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+          labelStyle: TextStyle(color: Colors.black)),
+    );
+  }
+
+  Widget fullnameTextField() {
+    return TextFormField(
+      controller: fullNameController,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+          fillColor: Colors.white10,
+          filled: true,
+          labelText: 'Họ và Tên',
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          focusedBorder:
+              OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+          labelStyle: TextStyle(color: Colors.black)),
+    );
+  }
+
+  Widget phoneTextField() {
+    return TextFormField(
+      controller: phoneController,
+      keyboardType: TextInputType.number,
+      decoration: InputDecoration(
+          fillColor: Colors.white10,
+          filled: true,
+          labelText: 'Phone',
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          focusedBorder:
+              OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+          labelStyle: TextStyle(color: Colors.black)),
+    );
+  }
+
+  Widget passwordTextField() {
+    return TextFormField(
+      controller: passwordController,
+      obscureText: true,
+      decoration: InputDecoration(
+        fillColor: Colors.white10,
+        filled: true,
+        labelText: 'Mật khẩu',
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        focusedBorder:
+            OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+        labelStyle: TextStyle(color: Colors.black),
+        suffixIcon: IconButton(
+          onPressed: () {
+            setState(() {
+              isPasswordVisible = !isPasswordVisible;
+            });
+          },
+          icon: Icon(
+            isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+            color: Colors.black,
+          ),
+        ),
+        alignLabelWithHint: false,
+      ),
+      keyboardType: TextInputType.visiblePassword,
+      textInputAction: TextInputAction.done,
+    );
+  }
+
+  Widget retypepasswordTextField() {
+    return TextFormField(
+      controller: retypepasswordController,
+      obscureText: true,
+      decoration: InputDecoration(
+        fillColor: Colors.white10,
+        filled: true,
+        labelText: 'Nhập lại Mật khẩu',
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        focusedBorder:
+            OutlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
+        labelStyle: TextStyle(color: Colors.black),
+        suffixIcon: IconButton(
+          onPressed: () {
+            setState(() {
+              isPasswordVisible = !isPasswordVisible;
+            });
+          },
+          icon: Icon(
+            isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+            color: Colors.black,
+          ),
+        ),
+        alignLabelWithHint: false,
+      ),
+      keyboardType: TextInputType.visiblePassword,
+      textInputAction: TextInputAction.done,
+    );
+  }
+
+  Widget circleAvatarButton() {
+    return CircleAvatar(
+      radius: 30,
+      backgroundColor: Colors.black,
+      child: IconButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/');
+          },
+          icon: Icon(Icons.arrow_back)),
+    );
+  }
+
+  Widget ButtonRegister() {
+    return TextButton(
+      onPressed: () {
+        handleRegister();
+      },
+      child: Text('ĐĂNG KÝ',
+          style: TextStyle(
+              fontSize: 27, fontWeight: FontWeight.bold, color: Colors.black)),
     );
   }
 }

@@ -22,3 +22,7 @@ SignInPage, SignUpPage and CameraPage About Ui Done
 =======
 SignInPage, SignUpPage and CameraPage About Ui Done But Logic Authetication no done
 >>>>>>> 5a2215ccedc875b18d977d860fbbfbffc554f9ca
+
+
+![Login](image-1.png)
+![Register](image-2.png)

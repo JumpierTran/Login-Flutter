@@ -1,8 +1,8 @@
-const LOGIN = 'me/login';
+const LOGIN = '/me/login';
 
-const IMAGES = 'images';
+const IMAGES = '/images';
 
-const DEVICES = 'api/vshome/devices';
+const DEVICES = '/api/vshome/devices';
 
 const PROFILE = '/profile';
 

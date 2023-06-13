@@ -1,8 +1,4 @@
-// import 'dart:developer';
-
 import 'package:camera_app/service/apiAuth.dart';
-import 'package:dio/dio.dart';
-// import 'package:dio/dio.dart';
 
 class BaseService {
   final ApiAuth _dio = ApiAuth();
@@ -10,20 +6,11 @@ class BaseService {
   Future<void> login(String phone, String password) async {
     await _dio.loginUser(phone, password);
   }
+
+  Future<void> register(String phone, String password, String retypepassword,
+      String fullname, String address) async {
+    await _dio.registerUser(phone, password, retypepassword, fullname, address);
+  }
+
+  
 }
-
-
-  
-  
-
-//   Future<AuthModel> createlogin(phone,password) async {
-//     Response res;
-//     res =  await _dio.post("/login",);
-//   }
-
-  
-
-
-
-
-
