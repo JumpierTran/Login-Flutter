@@ -1,5 +1,6 @@
 import 'package:camera_app/auth/auth_model.dart';
-import 'package:camera_app/core/global.dart';
+import 'package:camera_app/model/model_devices.dart';
+import 'package:camera_app/service/sessionmanager.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -8,13 +9,9 @@ class ApiAuth {
   late AuthInterceptor authInterceptor;
   final String baseUrl = 'https://app.mekongsmartcam.vn/edge/vshome';
   ApiAuth() {
-    // _dio.options.baseUrl = 'https://app.mekongsmartcam.vn/edge/vshome';
     authInterceptor = AuthInterceptor();
     _dio.interceptors.add(authInterceptor);
-    // _dio.interceptors.add(PrettyDioLogger());
   }
-
-  Dio get sendRequest => _dio;
 
   Future<Response> loginUser(String phone, String password) async {
     final url = '$baseUrl/me/login';
@@ -24,6 +21,7 @@ class ApiAuth {
     };
     try {
       final response = await _dio.post(url, queryParameters: data);
+      authInterceptor.authModel = AuthModel.fromJson(response.data);
       return response;
     } catch (e) {
       throw Exception(e);
@@ -32,7 +30,7 @@ class ApiAuth {
 
   Future<Response> registerUser(String phone, String password,
       String retypepassword, String fullname, String address) async {
-    final url = '$baseUrl+';
+    final url = '$baseUrl/api/vshome/users';
     final data = {
       'phone': phone,
       'password': password,
@@ -47,28 +45,63 @@ class ApiAuth {
       throw Exception(e);
     }
   }
+
+  Future<Response> devices(
+      String type, Attributes attributes, String id) async {
+    final url = '$baseUrl/api/vshome/devices_users';
+    final data = {
+      'id': id,
+      'type': type,
+      'attributes': attributes,
+    };
+
+    try {
+      final response = await _dio.get(url, queryParameters: data);
+      return response;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 }
 
 class AuthInterceptor extends Interceptor {
   AuthModel? authModel;
   late SharedPreferences prefs;
+
+  AuthInterceptor() {
+    initSharedPreferences();
+  }
+  //Initial SharedPreferences
+  Future<void> initSharedPreferences() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
   @override
-  Future<void> onRequest(
+  void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
-    if (authModel != null && authModel!.session != null) {
-      options.headers['session'] = authModel!.session;
+    try {
+      final sessionKey = prefs.getString('Authorization');
+      if (sessionKey != null) {
+        options.headers['Authorization'] = sessionKey;
+      }
+    } catch (e) {
+      print('Lỗi xử lý request $e');
     }
     super.onRequest(options, handler);
   }
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    // Lưu session  từ response từ authModel
-    final responseData = response.data as Map<String, dynamic>;
-    final sessionData = responseData['session'] as Map<String, dynamic>?;
-    if (sessionData != null) {
-      Global().authModel?.session = sessionData as Session?;
-      prefs.setString('session', sessionData as String);
+    try {
+      final responseData = response.data as Map<String, dynamic>;
+      final sessionData = responseData['Authorization'] as Map<String, dynamic>?;
+      if (sessionData != null) {
+        final session = Session.fromJson(sessionData);
+        authModel!.session = session;
+        SessionManager().setSessionKey(session.key ?? '');
+      }
+    } catch (e) {
+      print('Lỗi xử lý response: $e');
     }
     super.onResponse(response, handler);
   }

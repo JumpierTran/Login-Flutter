@@ -1,13 +1,13 @@
 import 'package:camera_app/auth/Bloc/login/event_login.dart';
-import 'package:camera_app/auth/Bloc/login/state_login.dart';
 import 'package:camera_app/auth/Bloc/login/bloc_login.dart';
+import 'package:camera_app/auth/Bloc/login/state_login.dart';
+import 'package:camera_app/core/constpublic.dart';
 import 'package:camera_app/service/BaseService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 class HomeLoginPage extends StatefulWidget {
   HomeLoginPage({super.key});
@@ -21,10 +21,7 @@ class _HomeLoginPageState extends State<HomeLoginPage> {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool showErrorMessage = true;
-  bool isPasswordVisible = false;
-  final api = BaseService();
-  late LoginBLoc loginBLoc;
-
+  bool isPasswordVisible = true;
   @override
   void dispose() {
     phoneController.dispose();
@@ -32,76 +29,85 @@ class _HomeLoginPageState extends State<HomeLoginPage> {
     super.dispose();
   }
 
-  void initialzeLoginBloc() async {
-    super.initState();
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    loginBLoc = LoginBLoc(sharedPreferences);
-    loginBLoc.initPrefs();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginBLoc, LoginState>(
+    return BlocProvider(
+      create: (context) => LoginBLoc(BaseService()),
+      child: BlocListener<LoginBLoc, LoginState>(
         listener: (context, state) {
           if (state is LoginSuccess) {
             Navigator.pushNamed(context, '/images');
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text('Đăng nhập thành công')));
           } else if (state is LoginFailure) {
             ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(state.error)));
+                .showSnackBar(SnackBar(content: Text('Đăng nhập thất bại!')));
+                if(state.error == 'Lỗi xác thực đăng nhập'){
+                  
+                }else {
+                  
+                }
           }
         },
-        child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [Colors.white, Colors.lightBlue, Colors.cyanAccent],
-              ),
-            ),
-            child: Scaffold(
-                backgroundColor: Colors.transparent,
-                body: BlocBuilder<LoginBLoc, LoginState>(
-                    builder: (context, state) {
-                  return Stack(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(left: 45, top: 150),
-                        child: Text(
-                          'Chào mừng \n  đến với \n     VSHOME 📸',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 23,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SingleChildScrollView(
-                          child: Container(
-                        padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * 0.5,
-                            right: 35,
-                            left: 35),
-                        child: Form(
-                          key: _formkey,
-                          child: Column(
-                            children: [
-                              _phoneField(),
-                              SizedBox(height: 20),
-                              _passwordField(),
-                              SizedBox(height: 20),
-                              _buttonlogin(),
-                              SizedBox(height: 20),
-                              _buttonRegisterandForgetPassword(),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              _buttonPolicy()
-                            ],
+        child: BlocBuilder<LoginBLoc, LoginState>(
+          builder: (context, state) {
+            if (state is LoginLoading) {
+              return CircularProgressIndicator();
+            } else if (state is LoginSuccess) {
+              return Text('Đăng nhập thành công!');
+            } else if (state is LoginFailure) {
+              return Text('Đăng nhập thất bại!');
+            }
+            return Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    colors: [Colors.white,Colors.lightBlue,Colors.cyanAccent],
+                  ),
+                ),
+                child: Scaffold(
+                    backgroundColor: Colors.transparent,
+                    body: Stack(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(left: 45, top: 130),
+                          child: Text(
+                            'Hãy đăng nhập tại đây 👇📸',
+                            style: ConstPublic.titleFontStyle,
                           ),
                         ),
-                      ))
-                    ],
-                  );
-                }))));
+                        SingleChildScrollView(
+                            child: Container(
+                          padding: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.height * 0.5,
+                              right: 35,
+                              left: 35),
+                          child: Form(
+                            key: _formkey,
+                            child: Column(
+                              children: [
+                                _phoneField(),
+                                SizedBox(height: 20),
+                                _passwordField(),
+                                SizedBox(height: 20),
+                                _buttonlogin(),
+                                SizedBox(height: 20),
+                                _buttonRegisterandForgetPassword(),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                _buttonPolicy()
+                              ],
+                            ),
+                          ),
+                        ))
+                      ],
+                    )));
+          },
+        ),
+      ),
+    );
   }
 
   Widget _phoneField() {
@@ -174,16 +180,14 @@ class _HomeLoginPageState extends State<HomeLoginPage> {
                   textColor: Colors.white,
                   fontSize: 14);
             } else {
-              context
-                  .read<LoginBLoc>()
-                  .add(LoginButtonPressed(phone, password));
+              LoginBLoc loginBLoc =
+                  Provider.of<LoginBLoc>(context, listen: false);
+              loginBLoc.add(LoginButtonPressed(phone, password));
+
+              Navigator.pushNamed(context, '/images');
             }
           },
-          child: Text('Đăng nhập',
-              style: TextStyle(
-                  fontSize: 27,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black)),
+          child: Text('Đăng nhập', style: ConstPublic.buttonFontStyle),
         ),
         CircleAvatar(
           radius: 30,
@@ -206,19 +210,20 @@ class _HomeLoginPageState extends State<HomeLoginPage> {
           onPressed: () {
             Navigator.pushNamed(context, '/register');
           },
-          child: Text('Đăng ký tại đây',
-              style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  fontSize: 18,
-                  color: Colors.black87)),
+          child: Text('Đăng ký tại đây', style: ConstPublic.buttonOtherStyle),
         ),
         TextButton(
-          onPressed: () {},
-          child: Text('Quên Mật khẩu',
-              style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  fontSize: 16,
-                  color: Colors.black87)),
+          onPressed: () {
+            //This page and function will be developed in the future
+            Fluttertoast.showToast(
+                msg: 'Chức năng này hiện đang phát triển chưa ra mắt',
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.black,
+                textColor: Colors.white,
+                fontSize: 14);
+          },
+          child: Text('Quên Mật khẩu', style: ConstPublic.buttonOtherStyle),
         ),
       ],
     );
@@ -227,15 +232,26 @@ class _HomeLoginPageState extends State<HomeLoginPage> {
   Widget _buttonPolicy() {
     return Center(
       child: TextButton(
-          onPressed: () {
-            // we will developer function in the future
-          },
-          child: Text('Chính sách bảo mật',
-              style: TextStyle(
-                fontSize: 23,
-                color: Colors.white,
-                // decoration: TextDecoration.underline
-              ))),
+        onPressed: () {
+          // This page and function will be developed in the future
+          Fluttertoast.showToast(
+              msg: 'Chức năng đang phát triển hiện chưa ra mắt',
+              gravity: ToastGravity.BOTTOM,
+              backgroundColor: Colors.black,
+              textColor: Colors.white,
+              fontSize: 14);
+        },
+        child: Text(
+          'Chính sách bảo mật',
+          style: TextStyle(
+              fontSize: 18,
+              color: Colors.white,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w500
+              // decoration: TextDecoration.underline
+              ),
+        ),
+      ),
     );
   }
 }

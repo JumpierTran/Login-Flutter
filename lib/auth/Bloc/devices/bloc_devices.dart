@@ -4,5 +4,5 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DeviceBLoc extends Bloc<DeviceEvent, DeviceState>{
   DeviceBLoc() : super(DeviceInitial());
-
+  
 }

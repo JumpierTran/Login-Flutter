@@ -19,17 +19,21 @@ class _DetailMyCameraState extends State<DetailMyCamera> {
               colors: [
             Colors.white,
             Colors.lightBlue,
+            Colors.cyanAccent,
           ])),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         bottomNavigationBar: BottomAppBar(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _bottomAppBarItem(context,icon: IconlyLight.image,label: 'Image'),
-              _bottomAppBarItem(context,icon: IconlyLight.camera,label: 'Camera'),
-              _bottomAppBarItem(context,icon: IconlyLight.profile,label: 'Profile'),
-            ],
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 40,vertical: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _bottomAppBarItem(context,icon: IconlyLight.image,label: 'Image'),
+                _bottomAppBarItem(context,icon: IconlyLight.camera,label: 'Camera'),
+                _bottomAppBarItem(context,icon: IconlyLight.profile,label: 'Profile'),
+              ],
+            ),
           ),
         ),
         body: Stack(

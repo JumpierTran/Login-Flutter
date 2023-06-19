@@ -1,3 +1,4 @@
+import 'package:camera_app/model/model_devices.dart';
 import 'package:camera_app/service/apiAuth.dart';
 
 class BaseService {
@@ -12,5 +13,8 @@ class BaseService {
     await _dio.registerUser(phone, password, retypepassword, fullname, address);
   }
 
-  
+  Future<void> getDevices(
+      String type, Attributes attributes, String id) async {
+    await _dio.devices(type, attributes, id);
+  }
 }

@@ -6,8 +6,8 @@ class RegisterLoading extends RegisterState {}
 
 class RegisterSuccess extends RegisterState {}
 
-class RegisterFailure extends RegisterState {
+class RegisterEmptyFailure extends RegisterState {
   final String errorMessage;
 
-  RegisterFailure(this.errorMessage);
+  RegisterEmptyFailure(this.errorMessage);
 }

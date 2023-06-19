@@ -1,3 +1,4 @@
+import 'package:camera_app/core/constpublic.dart';
 import 'package:camera_app/service/apiAuth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -18,7 +19,7 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
   final TextEditingController addressController = TextEditingController();
   final api = ApiAuth();
 
-  bool isPasswordVisible = false;
+  bool isPasswordVisible = true;
 
   void handleRegister() async {
     String address = addressController.text;
@@ -64,14 +65,10 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
         body: Stack(
           children: [
             Container(
-              padding: EdgeInsets.only(left: 30, top: 120),
+              padding: EdgeInsets.only(left: 30, top: 90),
               child: Text(
-                'Tạo tài khoản \n📷',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 23,
-                  fontWeight: FontWeight.bold,
-                ),
+                'Tạo tài khoản tại đây📷',
+                style: ConstPublic.titleFontStyle
               ),
             ),
             SingleChildScrollView(
@@ -82,7 +79,7 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
                     left: 35),
                 child: Column(
                   children: [
-                    SizedBox(height: 20),
+                    SizedBox(height: 40),
                     addressTextField(),
                     SizedBox(height: 20),
                     fullnameTextField(),
@@ -120,7 +117,8 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           focusedBorder:
               OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-          labelStyle: TextStyle(color: Colors.black)),
+          labelStyle: ConstPublic.inputTextFormField
+          ),
     );
   }
 
@@ -135,7 +133,8 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           focusedBorder:
               OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-          labelStyle: TextStyle(color: Colors.black)),
+          labelStyle: ConstPublic.inputTextFormField
+          ),
     );
   }
 
@@ -150,14 +149,15 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           focusedBorder:
               OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-          labelStyle: TextStyle(color: Colors.black)),
+          labelStyle: ConstPublic.inputTextFormField
+          ),
     );
   }
 
   Widget passwordTextField() {
     return TextFormField(
       controller: passwordController,
-      obscureText: true,
+      obscureText: isPasswordVisible,
       decoration: InputDecoration(
         fillColor: Colors.white10,
         filled: true,
@@ -165,7 +165,7 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         focusedBorder:
             OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-        labelStyle: TextStyle(color: Colors.black),
+        labelStyle: ConstPublic.inputTextFormField,
         suffixIcon: IconButton(
           onPressed: () {
             setState(() {
@@ -187,7 +187,7 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
   Widget retypepasswordTextField() {
     return TextFormField(
       controller: retypepasswordController,
-      obscureText: true,
+      obscureText: isPasswordVisible,
       decoration: InputDecoration(
         fillColor: Colors.white10,
         filled: true,
@@ -195,7 +195,7 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         focusedBorder:
             OutlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
-        labelStyle: TextStyle(color: Colors.black),
+        labelStyle: ConstPublic.inputTextFormField,
         suffixIcon: IconButton(
           onPressed: () {
             setState(() {
@@ -208,6 +208,7 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
           ),
         ),
         alignLabelWithHint: false,
+
       ),
       keyboardType: TextInputType.visiblePassword,
       textInputAction: TextInputAction.done,
@@ -220,7 +221,7 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
       backgroundColor: Colors.black,
       child: IconButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/');
+            Navigator.pushNamed(context, '/login');
           },
           icon: Icon(Icons.arrow_back)),
     );
@@ -232,8 +233,7 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
         handleRegister();
       },
       child: Text('ĐĂNG KÝ',
-          style: TextStyle(
-              fontSize: 27, fontWeight: FontWeight.bold, color: Colors.black)),
+          style: ConstPublic.buttonFontStyle),
     );
   }
 }

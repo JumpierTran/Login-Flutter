@@ -5,7 +5,6 @@ class AuthModel {
   String? address;
   String? customerCode;
   Session? session;
-
   AuthModel({
     this.fullname,
     this.id,

@@ -7,7 +7,8 @@ class LoginButtonPressed extends LoginEvent {
   LoginButtonPressed(this.phone, this.password);
 }
 
+
 class LogoutButtonPressed extends LoginEvent {}
 
-class LoginCheck extends LoginEvent {}
+class ResetPassword extends LoginEvent {}
 

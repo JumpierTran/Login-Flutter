@@ -1,3 +1,5 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
@@ -10,7 +12,44 @@ class CameraPage extends StatefulWidget {
 }
 
 class _CameraPageState extends State<CameraPage> {
-  void showCamera() {}
+  // final baseService = BaseService();
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  final dio = Dio();
+
+  void getData() async {
+    try {
+      var response = await dio.get(
+          'https://app.mekongsmartcam.vn/edge/vshome/api/vshome/device_users');
+      print(response);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  List<Thumbnail> thumbnailList = [
+    Thumbnail(
+      imagePath: 'assets/image/smart-tv.png',
+      title: 'Thumbnail 1',
+    ),
+    Thumbnail(
+      imagePath: 'assets/image/fan.png',
+      title: 'Thumbnail 2',
+    ),
+    Thumbnail(
+      imagePath: 'assets/image/light-bulb.png',
+      title: 'Thumbnail 3',
+    ),
+    Thumbnail(
+      imagePath: 'assets/image/air-conditioner.png',
+      title: 'Thumbnail 4',
+    ),
+    // Thêm các thumbnail khác vào đây
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +61,14 @@ class _CameraPageState extends State<CameraPage> {
               colors: [
             Colors.white,
             Colors.lightBlue,
+            Colors.cyanAccent,
           ])),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         bottomNavigationBar: BottomAppBar(
           notchMargin: 10,
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 35, vertical: 15),
+            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -41,55 +81,82 @@ class _CameraPageState extends State<CameraPage> {
                 ]),
           ),
         ),
-        body: Stack(
-          children: [
-            Container(
-              padding: EdgeInsets.only(left: 45, top: 135),
-              child: Text(
-                'Danh sách camera \n của bạn 📸',
-                style: TextStyle(
-                  fontSize: 23,
-                  color: Colors.white,
+        body: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 40.0, vertical: 25),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton.icon(
+                        onPressed: () {
+                          print('Search detail camera');
+                        },
+                        icon: Icon(IconlyLight.search, color: Colors.black),
+                        label: Text(
+                          'Search',
+                          style: TextStyle(fontSize: 23, color: Colors.black),
+                        )),
+                    Icon(
+                      Icons.person,
+                      size: 45,
+                      color: Colors.grey[800],
+                    ),
+                  ],
                 ),
-                textAlign: TextAlign.center,
               ),
-            ),
-            Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(height: 30),
-                  CircleAvatar(
-                    child: Image.asset(
-                      'assets/image/camera1.png',
-                      scale: 10,
-                    ),
-                  ),
-                  SizedBox(height: 30),
-                  CircleAvatar(
-                    child: Image.asset(
-                      'assets/image/camera2.png',
-                      scale: 8,
-                    ),
-                  ),
-                  SizedBox(height: 30),
-                  CircleAvatar(
-                    child: Image.asset('assets/image/camera3.png'),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              color: CupertinoColors.lightBackgroundGray,
-              padding: EdgeInsets.symmetric(horizontal: 350, vertical: 22),
-              child: IconButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/');
-                  },
-                  icon: Icon(IconlyLight.logout),color: Colors.blueAccent,iconSize: 30),
-            )
-          ],
+              SizedBox(),
+              Expanded(
+                child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 8.0,
+                        crossAxisSpacing: 8.0),
+                    itemCount: 4,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage(thumbnailList[index].imagePath),
+                                fit: BoxFit.cover),
+                          ),
+                          child: Stack(
+                            children: [
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Row(
+                                  children: [
+                                    IconButton(
+                                        onPressed: () {
+                                          print('add');
+                                        },
+                                        icon: Icon(Icons.add)),
+                                    IconButton(
+                                        onPressed: () {
+                                          print('edit');
+                                        },
+                                        icon: Icon(Icons.edit)),
+                                    IconButton(
+                                        onPressed: () {
+                                          print('delete');
+                                        },
+                                        icon: Icon(Icons.delete)),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -100,7 +167,7 @@ class _CameraPageState extends State<CameraPage> {
     return GestureDetector(
       onTap: () {
         if (icon == IconlyLight.home) {
-          Navigator.pushNamed(context, '/');
+          Navigator.pushNamed(context, '/login');
         } else if (icon == IconlyLight.camera) {
           Navigator.pushNamed(context, '/devices');
         } else if (icon == IconlyLight.profile) {
@@ -113,4 +180,13 @@ class _CameraPageState extends State<CameraPage> {
       ),
     );
   }
+}
+
+class Thumbnail {
+  String imagePath;
+  String title;
+  Thumbnail({
+    required this.imagePath,
+    required this.title,
+  });
 }

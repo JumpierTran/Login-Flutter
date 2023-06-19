@@ -1,38 +1,55 @@
 import 'package:camera_app/auth/Bloc/login/event_login.dart';
 import 'package:camera_app/auth/Bloc/login/state_login.dart';
-import 'package:camera_app/auth/auth_model.dart';
-import 'package:camera_app/core/global.dart';
 import 'package:camera_app/service/BaseService.dart';
 import 'package:camera_app/service/apiAuth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginBLoc extends Bloc<LoginEvent, LoginState> {
-  late final SharedPreferences? prefs;
-  AuthModel? authModel;
-  LoginBLoc(this.prefs) : super(LoginInitial()) {
-    initPrefs();
-    on<LoginButtonPressed>((event, emit) {
-      final phone = event.phone;
-      final password = event.password;
-      if (phone.isEmpty || password.isEmpty) {
-        emit(LoginFailure(error: 'Vui lòng nhập số điện thoại và mật khẩu'));
-        return;
-      }
-      
+  final BaseService baseService;
+  late final SharedPreferences prefs;
+  LoginBLoc(this.baseService) : super(LoginInitial()) {
+    initSharedPreferences();
+    // on<LoginButtonPressed>((event, emit) async {
+    //   final phone = event.phone;
+    //   final password = event.password;
+    //   if (phone.length != 10) {
+    //     emit(LoginFailure(error: 'Số điện thoại phải có 10 số'));
+    //     return;
+    //   }
+    //   if (password.length >= 8) {
+    //     emit(LoginFailure(error: 'Mật khẩu phải có ít 8 kí tự '));
+    //   }
 
+    //   final regex = RegExp(
+    //       r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]+$');
+    //   if (!regex.hasMatch(password)) {
+    //     emit(LoginFailure(
+    //         error:
+    //             'Mật khẩu phải ít nhất một chữ cái, một số và một kí tự đặc biệt'));
+    //     return;
+    //   }
 
-    });
+    //   emit(LoginLoading()); // Cập nhật trạng thái đang tải
+
+    //   try {
+    //     // Gửi yêu cầu đăng nhập đến API và xử lý kết quả
+    //     await baseService.login(phone, password);
+    //     final session = ApiAuth().authInterceptor.authModel!.session;
+    //     prefs.setString('session', session?.key ?? '');
+    //     if (session != null) {
+    //       emit(LoginSuccess()); // Cập nhật trạng thái đăng nhập thành công
+    //     } else {
+    //       emit(LoginFailure(error: 'Lỗi xác thực đăng nhập.'));
+    //     }
+    //   } catch (e) {
+    //     emit(LoginFailure(error: 'Đăng nhập thất bại $e'));
+    //   }
+    // });
   }
 
-  void initPrefs() async {
+  Future<void> initSharedPreferences() async {
     prefs = await SharedPreferences.getInstance();
-    final savedSession = Global().prefs.getString('session');
-    if (savedSession != null) {
-      authModel?.session =
-          Session.fromJson(savedSession as Map<String, dynamic>);
-      ApiAuth().authInterceptor.authModel?.session;
-    }
   }
 
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
@@ -44,18 +61,20 @@ class LoginBLoc extends Bloc<LoginEvent, LoginState> {
         yield LoginFailure(
             error: 'Vui lòng nhập lại số điện thoại và mật khẩu');
         return;
-      } else {
-        yield LoginLoading();
-        try {
-          await BaseService().login(phone, password);
-          final session = prefs?.getString('session');
-          if (session != null) {
-            ApiAuth().authInterceptor.authModel?.session;
-            yield LoginSuccess();
-          }
-        } catch (e) {
-          yield LoginFailure(error: 'Đăng nhập thất bại');
+      }
+
+      yield LoginLoading();
+      try {
+        await baseService.login(phone, password);
+        final session = ApiAuth().authInterceptor.authModel!.session;
+        prefs.setString('session', session?.key ?? '');
+        if (session != null) {
+          yield LoginSuccess();
+        } else {
+          yield LoginFailure(error: 'Lỗi xác thực đăng nhập.');
         }
+      } catch (e) {
+        yield LoginFailure(error: 'Đăng nhập thất bại $e');
       }
     }
   }
