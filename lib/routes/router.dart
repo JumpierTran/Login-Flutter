@@ -33,7 +33,7 @@ class RouterFluro {
   static initRoutes() {
     fluroRouter.define("/",
         handler: screenSplashHandler,
-        transitionType: TransitionType.inFromLeft);
+        transitionType: TransitionType.fadeIn);
     fluroRouter.define("/login",
         handler: screenLoginHandler,
         transitionType: TransitionType.inFromLeft);

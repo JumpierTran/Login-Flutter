@@ -66,10 +66,8 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
           children: [
             Container(
               padding: EdgeInsets.only(left: 30, top: 90),
-              child: Text(
-                'Tạo tài khoản tại đây📷',
-                style: ConstPublic.titleFontStyle
-              ),
+              child: Text('Tạo tài khoản tại đây📷',
+                  style: ConstPublic.titleFontStyle),
             ),
             SingleChildScrollView(
               child: Container(
@@ -117,8 +115,7 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           focusedBorder:
               OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-          labelStyle: ConstPublic.inputTextFormField
-          ),
+          labelStyle: ConstPublic.inputTextFormField),
     );
   }
 
@@ -133,8 +130,7 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           focusedBorder:
               OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-          labelStyle: ConstPublic.inputTextFormField
-          ),
+          labelStyle: ConstPublic.inputTextFormField),
     );
   }
 
@@ -149,8 +145,7 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           focusedBorder:
               OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-          labelStyle: ConstPublic.inputTextFormField
-          ),
+          labelStyle: ConstPublic.inputTextFormField),
     );
   }
 
@@ -208,7 +203,6 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
           ),
         ),
         alignLabelWithHint: false,
-
       ),
       keyboardType: TextInputType.visiblePassword,
       textInputAction: TextInputAction.done,
@@ -221,7 +215,7 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
       backgroundColor: Colors.black,
       child: IconButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/login');
+            Navigator.pop(context);
           },
           icon: Icon(Icons.arrow_back)),
     );
@@ -232,8 +226,7 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
       onPressed: () {
         handleRegister();
       },
-      child: Text('ĐĂNG KÝ',
-          style: ConstPublic.buttonFontStyle),
+      child: Text('ĐĂNG KÝ', style: ConstPublic.buttonFontStyle),
     );
   }
 }
