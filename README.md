@@ -1,6 +1,7 @@
 # project
 
 A new Flutter project.
+Project is intership for company required make camera app
 
 ## Getting Started
 
@@ -23,6 +24,6 @@ SignInPage, SignUpPage and CameraPage About Ui Done
 SignInPage, SignUpPage and CameraPage About Ui Done But Logic Authetication no done
 >>>>>>> 5a2215ccedc875b18d977d860fbbfbffc554f9ca
 
-
-![Login](image-1.png)
-![Register](image-2.png)
+## US 
+Using packages: dio, fluro, google-fonts, sharedpreferences, flutter_bloc, flutter_toast
+And call API get data

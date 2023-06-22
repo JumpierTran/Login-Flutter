@@ -1,7 +1,5 @@
 import 'package:camera_app/core/constpublic.dart';
-import 'package:camera_app/service/apiAuth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class HomeRegisterPage extends StatefulWidget {
   HomeRegisterPage({super.key});
@@ -11,40 +9,16 @@ class HomeRegisterPage extends StatefulWidget {
 }
 
 class _HomeRegisterPageState extends State<HomeRegisterPage> {
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController retypepasswordController =
       TextEditingController();
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
-  final api = ApiAuth();
 
   bool isPasswordVisible = true;
-
-  void handleRegister() async {
-    String address = addressController.text;
-    String fullname = fullNameController.text;
-    String password = passwordController.text;
-    String retypepassword = retypepasswordController.text;
-    String phone = phoneController.text;
-    if (address.isEmpty ||
-        fullname.isEmpty ||
-        password.isEmpty ||
-        retypepassword.isEmpty ||
-        phone.isEmpty) {
-      Fluttertoast.showToast(
-          msg:
-              'Vùi lòng nhập lại Địa chỉ, Họ và Tên, Mật khẩu hoặc Số Điện Thoại không để trống',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM);
-    } else {
-      Future.delayed(Duration(seconds: 2), () {
-        Fluttertoast.showToast(
-            msg: 'Đăng ký thành công', gravity: ToastGravity.CENTER);
-        Navigator.pushNamed(context, '/');
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,12 +28,13 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
           colors: [
-            Colors.white,
-            Colors.lightBlue,
-            Colors.cyanAccent,
+            Colors.blue,
+            Colors.cyan,
+            Colors.greenAccent,
           ],
         ),
       ),
+      // color: Colors.white,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Stack(
@@ -75,27 +50,26 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
                     top: MediaQuery.of(context).size.height * 0.25,
                     right: 35,
                     left: 35),
-                child: Column(
-                  children: [
-                    SizedBox(height: 40),
-                    addressTextField(),
-                    SizedBox(height: 20),
-                    fullnameTextField(),
-                    SizedBox(height: 20),
-                    phoneTextField(),
-                    SizedBox(height: 20),
-                    passwordTextField(),
-                    SizedBox(height: 20),
-                    retypepasswordTextField(),
-                    SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        circleAvatarButton(),
-                        ButtonRegister(),
-                      ],
-                    ),
-                  ],
+                child: Form(
+                  key: _formkey,
+                  child: Column(
+                    children: [
+                      SizedBox(height: 20),
+                      addressTextField(),
+                      SizedBox(height: 20),
+                      fullnameTextField(),
+                      SizedBox(height: 20),
+                      phoneTextField(),
+                      SizedBox(height: 20),
+                      passwordTextField(),
+                      SizedBox(height: 20),
+                      retypepasswordTextField(),
+                      SizedBox(height: 20),
+                      buttonRegister(),
+                      SizedBox(height: 10),
+                      backbuttonlogin(),  
+                    ],
+                  ),
                 ),
               ),
             )
@@ -108,50 +82,77 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
   Widget addressTextField() {
     return TextFormField(
       controller: addressController,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return "Vui lòng nhập địa chỉ";
+        }
+        return null;
+      },
       decoration: InputDecoration(
           fillColor: Colors.white10,
           filled: true,
           labelText: 'Địa chỉ',
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           focusedBorder:
-              OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-          labelStyle: ConstPublic.inputTextFormField),
+              OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+          labelStyle: ConstPublic.inputTextFormField
+      ),
     );
   }
 
   Widget fullnameTextField() {
     return TextFormField(
       controller: fullNameController,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return "Vui lòng nhập họ và tên";
+        }
+        return null;
+      },
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          fillColor: Colors.white10,
-          filled: true,
-          labelText: 'Họ và Tên',
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          focusedBorder:
-              OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-          labelStyle: ConstPublic.inputTextFormField),
+        fillColor: Colors.white10,
+        filled: true,
+        labelText: 'Họ và Tên',
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        focusedBorder:
+            OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+        labelStyle: ConstPublic.inputTextFormField,
+      ),
     );
   }
 
   Widget phoneTextField() {
     return TextFormField(
       controller: phoneController,
+      validator: (value) {
+        if (value == null || value.isEmpty || value.length == 10) {
+          return "Vui lòng nhập số điện thoại";
+        }
+        return null;
+      },
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-          fillColor: Colors.white10,
-          filled: true,
-          labelText: 'Phone',
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          focusedBorder:
-              OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-          labelStyle: ConstPublic.inputTextFormField),
+        fillColor: Colors.white10,
+        filled: true,
+        labelText: 'Phone',
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        focusedBorder:
+            OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+        labelStyle: ConstPublic.inputTextFormField,
+      ),
     );
   }
 
   Widget passwordTextField() {
     return TextFormField(
       controller: passwordController,
+      validator: (value) {
+        if (value == null || value.isEmpty || value.length >= 8) {
+          return "Vui lòng nhập mật khẩu";
+        }
+        return null;
+      },
       obscureText: isPasswordVisible,
       decoration: InputDecoration(
         fillColor: Colors.white10,
@@ -159,7 +160,7 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
         labelText: 'Mật khẩu',
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         focusedBorder:
-            OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+            OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
         labelStyle: ConstPublic.inputTextFormField,
         suffixIcon: IconButton(
           onPressed: () {
@@ -182,6 +183,12 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
   Widget retypepasswordTextField() {
     return TextFormField(
       controller: retypepasswordController,
+      validator: (value) {
+        if (value == null || value.isEmpty || value.length >= 8) {
+          return "Vui lòng nhập lại mật khẩu";
+        }
+        return null;
+      },
       obscureText: isPasswordVisible,
       decoration: InputDecoration(
         fillColor: Colors.white10,
@@ -189,7 +196,7 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
         labelText: 'Nhập lại Mật khẩu',
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         focusedBorder:
-            OutlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
+            OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
         labelStyle: ConstPublic.inputTextFormField,
         suffixIcon: IconButton(
           onPressed: () {
@@ -209,23 +216,27 @@ class _HomeRegisterPageState extends State<HomeRegisterPage> {
     );
   }
 
-  Widget circleAvatarButton() {
-    return CircleAvatar(
-      radius: 30,
-      backgroundColor: Colors.black,
-      child: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.arrow_back)),
+  Widget backbuttonlogin() {
+    return TextButton(
+      onPressed: () {
+        Navigator.pop(context, "/login");
+      },
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+        foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+        ),
+      child: Text('Trở về đăng nhập',style: ConstPublic.buttonOtherStyle
+      )
     );
   }
 
-  Widget ButtonRegister() {
-    return TextButton(
-      onPressed: () {
-        handleRegister();
-      },
+  Widget buttonRegister() {
+    return ElevatedButton(
+      onPressed: () {},
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+        foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+      ),
       child: Text('ĐĂNG KÝ', style: ConstPublic.buttonFontStyle),
     );
   }

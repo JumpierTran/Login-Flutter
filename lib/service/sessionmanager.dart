@@ -1,36 +1,31 @@
-import 'package:camera_app/auth/auth_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SessionManager {
-  static final SessionManager _instance = SessionManager._internal();
-  late SharedPreferences _prefs;
+  static const String sessionKey = 'session';
+  static SharedPreferences? _prefs;
 
-  factory SessionManager() {
-    return _instance;
-  }
-
-  SessionManager._internal();
-
-  Future<void> initialze() async {
+  static Future<void> initialize() async {
     _prefs = await SharedPreferences.getInstance();
   }
 
-  String? getSessionKey() {
-    return _prefs.getString('SessionKey');
-  }
-
-  Future<void> setSessionKey(String sessionKey) async {
-    await _prefs.setString('SessionKey', sessionKey);
-  }
-
-  Future<void> clearSessionKey() async {
-    await _prefs.remove('SessionKey');
-  }
-
-  Future<void> saveSessionKeyFormAuthModel(AuthModel authModel) async {
-    final sessionKey = authModel.session!.key;
-    if (sessionKey != null) {
-      await setSessionKey(sessionKey);
+  static Future<String?> getSession() async {
+    if (_prefs == null) {
+      await initialize();
     }
+    return _prefs!.getString(sessionKey);
+  }
+
+  static Future<void> setSession(String session) async {
+    if (_prefs == null) {
+      await initialize();
+    }
+    await _prefs!.setString(sessionKey, session);
+  }
+
+  static Future<void> clearSession() async {
+    if (_prefs == null) {
+      await initialize();
+    }
+    await _prefs!.remove(sessionKey);
   }
 }

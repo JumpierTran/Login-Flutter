@@ -1,6 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 
@@ -16,20 +14,20 @@ class _CameraPageState extends State<CameraPage> {
   @override
   void initState() {
     super.initState();
-    getData();
+    // getData();
   }
 
   final dio = Dio();
 
-  void getData() async {
-    try {
-      var response = await dio.get(
-          'https://app.mekongsmartcam.vn/edge/vshome/api/vshome/device_users');
-      print(response);
-    } catch (e) {
-      print(e);
-    }
-  }
+  // void getData() async {
+  //   try {
+  //     var response = await dio.get(
+  //         'https://app.mekongsmartcam.vn/edge/vshome/api/vshome/device_users');
+  //     print(response);
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
   List<Thumbnail> thumbnailList = [
     Thumbnail(
@@ -59,9 +57,9 @@ class _CameraPageState extends State<CameraPage> {
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
               colors: [
-            Colors.white,
-            Colors.lightBlue,
-            Colors.cyanAccent,
+            Colors.blue,
+            Colors.cyan,
+            Colors.green,
           ])),
       child: Scaffold(
         backgroundColor: Colors.transparent,

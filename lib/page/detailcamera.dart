@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
 
 class DetailMyCamera extends StatefulWidget {
   const DetailMyCamera({super.key});
@@ -23,19 +22,19 @@ class _DetailMyCameraState extends State<DetailMyCamera> {
           ])),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        bottomNavigationBar: BottomAppBar(
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 40,vertical: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _bottomAppBarItem(context,icon: IconlyLight.image,label: 'Image'),
-                _bottomAppBarItem(context,icon: IconlyLight.camera,label: 'Camera'),
-                _bottomAppBarItem(context,icon: IconlyLight.profile,label: 'Profile'),
-              ],
-            ),
-          ),
-        ),
+        // bottomNavigationBar: BottomAppBar(
+        //   child: Container(
+        //     padding: EdgeInsets.symmetric(horizontal: 40,vertical: 10),
+        //     child: Row(
+        //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        //       children: [
+        //         _bottomAppBarItem(context,icon: IconlyLight.image,label: 'Image'),
+        //         _bottomAppBarItem(context,icon: IconlyLight.camera,label: 'Camera'),
+        //         _bottomAppBarItem(context,icon: IconlyLight.profile,label: 'Profile'),
+        //       ],
+        //     ),
+        //   ),
+        // ),
         body: Stack(
           children: [
             Container(
@@ -51,23 +50,23 @@ class _DetailMyCameraState extends State<DetailMyCamera> {
     );
   }
 
-  Widget _bottomAppBarItem(BuildContext context,
-      {required icon, required label}) {
-    return GestureDetector(
-      onTap: () {
-        if (icon == IconlyLight.image) {
-          Navigator.pushNamed(context, '/images');
-        } else if (icon == IconlyLight.camera) {
-          Navigator.pushNamed(context, '/devices');
-        } else if (icon == IconlyLight.profile) {
-          Navigator.pushNamed(context, '/profile');
-        }
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [Icon(icon), Text(label)],
-      ),
-    );
-  }
+  // Widget _bottomAppBarItem(BuildContext context,
+  //     {required icon, required label}) {
+  //   return GestureDetector(
+  //     onTap: () {
+  //       if (icon == IconlyLight.image) {
+  //         Navigator.pushNamed(context, '/dashboard');
+  //       } else if (icon == IconlyLight.camera) {
+  //         Navigator.pushNamed(context, '/devices');
+  //       } else if (icon == IconlyLight.profile) {
+  //         Navigator.pushNamed(context, '/profile');
+  //       }
+  //     },
+  //     child: Column(
+  //       mainAxisSize: MainAxisSize.min,
+  //       children: [Icon(icon), Text(label)],
+  //     ),
+  //   );
+  // }
   
 }

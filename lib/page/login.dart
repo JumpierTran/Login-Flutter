@@ -1,8 +1,10 @@
+import 'package:camera_app/bloc/login/bloc_login.dart';
+import 'package:camera_app/bloc/login/event_login.dart';
+import 'package:camera_app/bloc/login/state_login.dart';
 import 'package:camera_app/core/constpublic.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:camera_app/page/register.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeLoginPage extends StatefulWidget {
   HomeLoginPage({super.key});
@@ -12,10 +14,9 @@ class HomeLoginPage extends StatefulWidget {
 }
 
 class _HomeLoginPageState extends State<HomeLoginPage> {
-  final _formkey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  bool showErrorMessage = true;
   bool isPasswordVisible = true;
   @override
   void dispose() {
@@ -31,9 +32,14 @@ class _HomeLoginPageState extends State<HomeLoginPage> {
           gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
-            colors: [Colors.white, Colors.lightBlue, Colors.cyanAccent],
+            colors: [
+              Colors.blue,
+              Colors.cyan,
+              Colors.greenAccent,
+            ],
           ),
         ),
+        // color: Colors.white,
         child: Scaffold(
             backgroundColor: Colors.transparent,
             body: Stack(
@@ -60,12 +66,12 @@ class _HomeLoginPageState extends State<HomeLoginPage> {
                         _passwordField(),
                         SizedBox(height: 20),
                         _buttonlogin(),
-                        SizedBox(height: 20),
-                        _buttonRegisterandForgetPassword(),
+                        SizedBox(height: 10),
+                        _buttonRegister(),
                         SizedBox(
-                          height: 20,
+                          height: 10,
                         ),
-                        _buttonPolicy()
+                        _buttonPolicy(),
                       ],
                     ),
                   ),
@@ -75,123 +81,132 @@ class _HomeLoginPageState extends State<HomeLoginPage> {
   }
 
   Widget _phoneField() {
-    return TextFormField(
-      keyboardType: TextInputType.number,
-      controller: phoneController,
-      decoration: InputDecoration(
-        fillColor: Colors.white10,
-        filled: true,
-        labelText: 'Số điện thoại',
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-        focusedBorder:
-            OutlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
-        labelStyle: TextStyle(color: Colors.black),
-      ),
+    return BlocConsumer<LoginBLoc, LoginState>(
+      listener: (context, state) {
+        if (state is LoginFailure) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(state.errorMesage)));
+        }
+      },
+      builder: (context, state) {
+        return TextFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Số điện thoại tài khoản không được rỗng";
+            }
+            return null;
+          },
+          onChanged: (value) {
+            context.read<LoginBLoc>().add(PhoneEvent(phone: value));
+          },
+          keyboardType: TextInputType.number,
+          controller: phoneController,
+          decoration: InputDecoration(
+            fillColor: Colors.white10,
+            filled: true,
+            labelText: 'Số điện thoại',
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+            focusedBorder:
+                OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+            labelStyle: ConstPublic.inputTextFormField,
+          ),
+        );
+      },
     );
   }
 
   Widget _passwordField() {
-    return TextFormField(
-      controller: passwordController,
-      obscureText: isPasswordVisible,
-      decoration: InputDecoration(
-        fillColor: Colors.white10,
-        filled: true,
-        labelText: 'Mật khẩu',
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-        focusedBorder:
-            OutlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
-        labelStyle: TextStyle(color: Colors.black),
-        suffixIcon: IconButton(
-          onPressed: () {
-            setState(() {
-              isPasswordVisible = !isPasswordVisible;
-            });
+    return BlocConsumer<LoginBLoc, LoginState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return TextFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Mật khẩu không dược rỗng";
+            }
+            return null;
           },
-          icon: Icon(
-            isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-            color: Colors.black,
+          onChanged: (value) {
+            context.read<LoginBLoc>().add(PasswordEvent(password: value));
+          },
+          controller: passwordController,
+          obscureText: isPasswordVisible,
+          decoration: InputDecoration(
+            fillColor: Colors.white10,
+            filled: true,
+            labelText: 'Mật khẩu',
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+            focusedBorder:
+                OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+            labelStyle: ConstPublic.inputTextFormField,
+            suffixIcon: IconButton(
+              onPressed: () {
+                setState(() {
+                  isPasswordVisible = !isPasswordVisible;
+                });
+              },
+              icon: Icon(
+                isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                color: Colors.black,
+              ),
+            ),
+            alignLabelWithHint: false,
           ),
-        ),
-        alignLabelWithHint: false,
-      ),
-      keyboardType: TextInputType.visiblePassword,
-      textInputAction: TextInputAction.done,
+          keyboardType: TextInputType.visiblePassword,
+          textInputAction: TextInputAction.done,
+        );
+      },
     );
   }
 
   Widget _buttonlogin() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        CupertinoButton(
+    return BlocConsumer<LoginBLoc, LoginState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return ElevatedButton(
           onPressed: () async {
             //Login here
             print('Số điện thoại ${phoneController.text}');
             print('Mật khẩu là ${passwordController.text}');
-            
+            context.read<LoginBLoc>().add(LoginButtonPressed());
           },
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+              shadowColor: MaterialStateProperty.all<Color>(Colors.grey)),
           child: Text('Đăng nhập', style: ConstPublic.buttonFontStyle),
-        ),
-        CircleAvatar(
-          radius: 30,
-          backgroundColor: Colors.black,
-          child: IconButton(
-              onPressed: () {
-                // Navigator.pushNamed(context, '/register');
-              },
-              icon: Icon(Icons.arrow_forward)),
-        )
-      ],
+        );
+      },
     );
   }
 
-  Widget _buttonRegisterandForgetPassword() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        TextButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/register');
-          },
-          child: Text('Đăng ký tại đây', style: ConstPublic.buttonOtherStyle),
-        ),
-        TextButton(
-          onPressed: () {
-            //This page and function will be developed in the future
-            Fluttertoast.showToast(
-                msg: 'Chức năng này hiện đang phát triển chưa ra mắt',
-                gravity: ToastGravity.CENTER,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.black,
-                textColor: Colors.white,
-                fontSize: 14);
-          },
-          child: Text('Quên Mật khẩu', style: ConstPublic.buttonOtherStyle),
-        ),
-      ],
+  Widget _buttonRegister() {
+    return TextButton(
+      onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => HomeRegisterPage(key: UniqueKey())));
+      },
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+        backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+      ),
+      child: Text('Đăng ký tại đây', style: ConstPublic.buttonOtherStyle),
     );
   }
 
   Widget _buttonPolicy() {
     return Center(
       child: TextButton(
-        onPressed: () {
-          // This page and function will be developed in the future
-          Fluttertoast.showToast(
-              msg: 'Chức năng đang phát triển hiện chưa ra mắt',
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: Colors.black,
-              textColor: Colors.white,
-              fontSize: 14);
-        },
+        onPressed: () {},
         child: Text(
           'Chính sách bảo mật',
           style: TextStyle(
-              fontSize: 18,
-              color: Colors.white,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w500
+              fontSize: 20,
+              color: Colors.black.withOpacity(0.8),
+              fontFamily: 'Roboto',
+              fontWeight: FontWeight.w600
               // decoration: TextDecoration.underline
               ),
         ),

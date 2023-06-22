@@ -1,0 +1,1 @@
+const String baseUrl = 'https://app.mekongsmartcam.vn/edge/vshome';
