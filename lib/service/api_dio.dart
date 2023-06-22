@@ -12,8 +12,8 @@ class ApiDio extends InterceptorsWrapper {
 
   static BaseOptions opts = BaseOptions(
     baseUrl: "https://app.mekongsmartcam.vn/edge/vshome",
-    connectTimeout: Duration(seconds: 15000),
-    receiveTimeout: Duration(seconds: 15000),
+    connectTimeout: 15000,
+    receiveTimeout: 15000,
   );
 
   static final _dio = Dio(opts);

@@ -5,6 +5,7 @@ class AuthModel {
   String? address;
   String? customerCode;
   Session? session;
+
   AuthModel({
     this.fullname,
     this.id,
@@ -48,11 +49,6 @@ class Session {
     expiredAt = json['expiredAt'];
     key = json['key'];
   }
-
-  get expirationTime => null;
-
-  get expir => null;
-
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};

@@ -1,14 +1,12 @@
 name: camera_app
 description: A new Flutter project.
 
-publish_to: 'none' 
-
+publish_to: "none"
 
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.19.6 <3.0.0'
-
+  sdk: ">=2.19.6 <3.0.0"
 
 dependencies:
   flutter:
@@ -16,7 +14,7 @@ dependencies:
   provider: ^6.0.5
   fluro: ^2.0.5
   shared_preferences: ^2.1.1
-  dio: ^5.1.2
+  dio: ^4.0.6
   flutter_bloc: ^8.1.3
   fluttertoast: ^8.2.2
   equatable: ^2.0.5
@@ -26,13 +24,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  
   flutter_lints: ^2.0.0
 
-
 flutter:
-
-
   uses-material-design: true
   assets:
     - assets/image/imageFacebook.png
@@ -42,5 +36,3 @@ flutter:
     - assets/image/air-conditioner.png
     - assets/image/fan.png
     - assets/image/smart-tv.png
-
-  

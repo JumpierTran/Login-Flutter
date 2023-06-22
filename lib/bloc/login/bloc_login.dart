@@ -1,14 +1,11 @@
-import 'dart:developer';
-
 import 'package:camera_app/bloc/login/event_login.dart';
 import 'package:camera_app/bloc/login/state_login.dart';
-import 'package:camera_app/service/api_dio.dart';
 import 'package:camera_app/service/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginBLoc extends Bloc<LoginEvent, LoginState> {
-  final AuthService _service = AuthService();
+  final AuthService _authService = AuthService();
   LoginBLoc() : super(LoginInitial()) {
     on<PhoneEvent>(_phoneEvent);
     on<PasswordEvent>(_passwordEvent);
@@ -30,8 +27,11 @@ class LoginBLoc extends Bloc<LoginEvent, LoginState> {
     emit(LoginLoading());
 
     // try {
-    await _service.login({"phone": "0123456789", "password": "Vnpt@123"}).then(
-        (value) => value);
+    final data = {
+      "phone": "0123456789",
+      "password": "Vnpt@123",
+    };
+    await _authService.login(data);
 
     // if (response.session != null) {
     //   Navigator.pushReplacementNamed(context!, '/dashboard');
