@@ -60,3 +60,16 @@ class RetypePasswordEvent extends RegisterEvent {
   @override
   List<Object?> get props => [retypepassword];
 }
+
+class RegisterButtonPressed extends RegisterEvent {
+  final String address;
+  final String fullname;
+  final String phone;
+  final String password;
+  final String retypepassword;
+
+  RegisterButtonPressed(this.address, this.fullname, this.phone, this.password, this.retypepassword);
+
+  @override
+  List<Object> get props => [address,fullname,phone,password,retypepassword];
+}

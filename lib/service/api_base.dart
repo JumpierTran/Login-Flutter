@@ -9,8 +9,8 @@ class BaseAPi {
 
   BaseAPi() {
     BaseOptions options = BaseOptions(
-      receiveTimeout: 60000,
-      connectTimeout: 60000,
+      receiveTimeout: 50000,
+      connectTimeout: 50000,
     );
     _dio = Dio(options);
     _dio.interceptors.add(InterceptorApi());

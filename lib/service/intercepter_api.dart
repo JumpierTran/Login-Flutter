@@ -17,7 +17,7 @@ class InterceptorApi extends Interceptor {
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
     super.onError(err, handler);
-    log('************ Api Error - Start ************:');
+    log('************ Api Error - Start ************:',);
     log(err.message.toString());
   }
 

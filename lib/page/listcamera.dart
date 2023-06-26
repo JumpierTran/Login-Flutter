@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 
@@ -10,181 +9,83 @@ class CameraPage extends StatefulWidget {
 }
 
 class _CameraPageState extends State<CameraPage> {
-  // final baseService = BaseService();
-  @override
-  void initState() {
-    super.initState();
-    // getData();
-  }
-
-  final dio = Dio();
-
-  // void getData() async {
-  //   try {
-  //     var response = await dio.get(
-  //         'https://app.mekongsmartcam.vn/edge/vshome/api/vshome/device_users');
-  //     print(response);
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
-
-  List<Thumbnail> thumbnailList = [
-    Thumbnail(
-      imagePath: 'assets/image/smart-tv.png',
-      title: 'Thumbnail 1',
-    ),
-    Thumbnail(
-      imagePath: 'assets/image/fan.png',
-      title: 'Thumbnail 2',
-    ),
-    Thumbnail(
-      imagePath: 'assets/image/light-bulb.png',
-      title: 'Thumbnail 3',
-    ),
-    Thumbnail(
-      imagePath: 'assets/image/air-conditioner.png',
-      title: 'Thumbnail 4',
-    ),
-    // Thêm các thumbnail khác vào đây
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-            Colors.blue,
-            Colors.cyan,
-            Colors.green,
-          ])),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        bottomNavigationBar: BottomAppBar(
-          notchMargin: 10,
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(25, 25, 25, 0),
+              child: Row(
                 children: [
-                  _bottomAppBarItem(context,
-                      icon: IconlyLight.home, label: 'Home'),
-                  _bottomAppBarItem(context,
-                      icon: IconlyLight.camera, label: 'Camera'),
-                  _bottomAppBarItem(context,
-                      icon: IconlyLight.profile, label: 'Profile'),
-                ]),
-          ),
-        ),
-        body: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 40.0, vertical: 25),
+                  IconButton(
+                    icon: Icon(Icons.menu),
+                    onPressed: () {},
+                    tooltip: "Xem thông tin",
+                  ),
+                  Expanded(
+                    child: Container(),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () {},
+                  ),
+                  SizedBox(width: 25),
+                  IconButton(
+                    icon: Icon(IconlyLight.logout),
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/login");
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: Container(
+                margin: EdgeInsets.fromLTRB(25, 25, 25, 25),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    TextButton.icon(
-                        onPressed: () {
-                          print('Search detail camera');
-                        },
-                        icon: Icon(IconlyLight.search, color: Colors.black),
-                        label: Text(
-                          'Search',
-                          style: TextStyle(fontSize: 23, color: Colors.black),
-                        )),
-                    Icon(
-                      Icons.person,
-                      size: 45,
-                      color: Colors.grey[800],
-                    ),
+                    Text('Phổ biến',
+                        style:
+                            TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
+                    Text('Xem tất cả',
+                        style:
+                            TextStyle(fontWeight: FontWeight.w500, fontSize: 16))
                   ],
                 ),
               ),
-              SizedBox(),
-              Expanded(
+            ),
+            Expanded(
                 child: GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
-                        mainAxisSpacing: 8.0,
-                        crossAxisSpacing: 8.0),
+                        crossAxisSpacing: 5,
+                        childAspectRatio: 0.79),
                     itemCount: 4,
                     itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage(thumbnailList[index].imagePath),
-                                fit: BoxFit.cover),
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.black12,
+                                  borderRadius: BorderRadius.circular(30)),
+                              width: 180,
+                              child: Image.asset("assets/image/air-conditioner.png",height: 50,width: 50,),
+                            ),
                           ),
-                          child: Stack(
-                            children: [
-                              Align(
-                                alignment: Alignment.bottomCenter,
-                                child: Row(
-                                  children: [
-                                    IconButton(
-                                        onPressed: () {
-                                          print('add');
-                                        },
-                                        icon: Icon(Icons.add)),
-                                    IconButton(
-                                        onPressed: () {
-                                          print('edit');
-                                        },
-                                        icon: Icon(Icons.edit)),
-                                    IconButton(
-                                        onPressed: () {
-                                          print('delete');
-                                        },
-                                        icon: Icon(Icons.delete)),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                          Text('Camera',style: TextStyle(fontSize: 18),),
+                        ],
                       );
-                    }),
-              )
-            ],
-          ),
+                    }))
+          ],
         ),
       ),
     );
   }
-
-  Widget _bottomAppBarItem(BuildContext context,
-      {required icon, required label}) {
-    return GestureDetector(
-      onTap: () {
-        if (icon == IconlyLight.home) {
-          Navigator.pushNamed(context, '/login');
-        } else if (icon == IconlyLight.camera) {
-          Navigator.pushNamed(context, '/devices');
-        } else if (icon == IconlyLight.profile) {
-          Navigator.pushNamed(context, '/profile');
-        }
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [Icon(icon), Text(label)],
-      ),
-    );
-  }
-}
-
-class Thumbnail {
-  String imagePath;
-  String title;
-  Thumbnail({
-    required this.imagePath,
-    required this.title,
-  });
 }

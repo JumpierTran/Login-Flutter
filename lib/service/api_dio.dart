@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:camera_app/auth/auth_model.dart';
 import 'package:camera_app/core/global.dart';
 import 'package:camera_app/core/url.dart';
-import 'package:camera_app/model/model_devices.dart';
+import 'package:camera_app/auth/model_camera.dart';
 import 'package:camera_app/service/authinterceptor.dart';
 import 'package:dio/dio.dart';
 

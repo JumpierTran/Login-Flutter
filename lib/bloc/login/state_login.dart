@@ -4,10 +4,8 @@ class LoginState extends Equatable {
   final String phone;
   final String password;
 
-  const LoginState({
-    this.phone = "",
-    this.password = "",
-  });
+  const LoginState(
+      {this.phone = "", this.password = ""});
 
   LoginState copyWith({
     String? phone,
@@ -37,3 +35,4 @@ class LoginFailure extends LoginState {
   @override
   List<Object> get props => [errorMesage];
 }
+

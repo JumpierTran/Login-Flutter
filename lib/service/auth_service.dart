@@ -8,4 +8,21 @@ class AuthService {
     final res = await _dioAuth.post('me/login', data: data);
     return AuthModel.fromJson(res);
   }
+
+  Future<AuthModel> register(data) async {
+    final res = await _dioAuth.post('api/vshome/users', data: data);
+    return AuthModel.fromJson(res);
+  }
+
+  Future<AuthModel> getcamera(data) async {
+    final res =
+        await _dioAuth.get('/api/vshome/device_users', queryParameters: data);
+    return AuthModel.fromJson(res);
+  }
+
+  Future<AuthModel> createcamera(data) async {
+    final res = await _dioAuth.post('/api/vshome/device_users',
+        queryParameters: data);
+    return AuthModel.fromJson(res);
+  }
 }

@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: _token != "" ? "/dashboard" : '/login',
+        initialRoute: _token.isNotEmpty ? "/dashboard" : '/login',
         onGenerateRoute: RouterFluro.fluroRouter.generator,
         home: HomeRegisterPage(key: UniqueKey()),
       ),

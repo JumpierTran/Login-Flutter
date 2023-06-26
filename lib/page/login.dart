@@ -28,18 +28,18 @@ class _HomeLoginPageState extends State<HomeLoginPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              Colors.blue,
-              Colors.cyan,
-              Colors.greenAccent,
-            ],
-          ),
-        ),
-        // color: Colors.white,
+        // decoration: BoxDecoration(
+        //   gradient: LinearGradient(
+        //     begin: Alignment.topRight,
+        //     end: Alignment.bottomLeft,
+        //     colors: [
+        //       Colors.blue,
+        //       Colors.cyan,
+        //       Colors.greenAccent,
+        //     ],
+        //   ),
+        // ),
+        color: Colors.white,
         child: Scaffold(
             backgroundColor: Colors.transparent,
             body: Stack(
@@ -68,9 +68,7 @@ class _HomeLoginPageState extends State<HomeLoginPage> {
                         _buttonlogin(),
                         SizedBox(height: 10),
                         _buttonRegister(),
-                        SizedBox(
-                          height: 10,
-                        ),
+                        SizedBox(height: 10),
                         _buttonPolicy(),
                       ],
                     ),
@@ -161,20 +159,34 @@ class _HomeLoginPageState extends State<HomeLoginPage> {
 
   Widget _buttonlogin() {
     return BlocConsumer<LoginBLoc, LoginState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is LoginFailure) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(state.errorMesage)));
+        } else if (state is LoginSuccess) {
+          Navigator.pushReplacementNamed(context, "/dashboard");
+        }
+      },
       builder: (context, state) {
         return ElevatedButton(
-          onPressed: () async {
+          onPressed:state is LoginLoading ? null : () async {
             //Login here
+            if(_formkey.currentState!.validate()){
             print('Số điện thoại ${phoneController.text}');
             print('Mật khẩu là ${passwordController.text}');
-            context.read<LoginBLoc>().add(LoginButtonPressed());
+            context.read<LoginBLoc>().add(LoginButtonPressed(
+                phoneController.text, passwordController.text
+                  )
+                );
+             }
           },
           style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
               foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
               shadowColor: MaterialStateProperty.all<Color>(Colors.grey)),
-          child: Text('Đăng nhập', style: ConstPublic.buttonFontStyle),
+          child:state is LoginLoading ? CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.lightBlue),
+          ) : Text('Đăng nhập', style: ConstPublic.buttonFontStyle,),
         );
       },
     );

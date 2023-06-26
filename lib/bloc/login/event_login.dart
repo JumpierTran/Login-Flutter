@@ -20,7 +20,18 @@ class PasswordEvent extends LoginEvent {
 }
 
 class LoginButtonPressed extends LoginEvent {
-  
+  final String phone;
+  final String password;
+
+  LoginButtonPressed(this.phone, this.password);
   @override
-  List<Object> get props => [];
+  List<Object> get props => [phone, password];
+}
+
+class LogoutButtonPressed extends LoginEvent {
+  final String session;
+
+  LogoutButtonPressed(this.session);
+  @override
+  List<Object?> get props => [session];
 }
