@@ -1,12 +1,12 @@
-class ModelCamera {
+class CameraModel {
   List<Data>? data;
   Links? links;
   Meta? meta;
   Jsonapi? jsonapi;
 
-  ModelCamera({this.data, this.links, this.meta, this.jsonapi});
+  CameraModel({this.data, this.links, this.meta, this.jsonapi});
 
-  ModelCamera.fromJson(Map<String, dynamic> json) {
+  CameraModel.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
@@ -19,7 +19,22 @@ class ModelCamera {
         json['jsonapi'] != null ? Jsonapi.fromJson(json['jsonapi']) : null;
   }
 
-  
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    if (links != null) {
+      data['links'] = links!.toJson();
+    }
+    if (meta != null) {
+      data['meta'] = meta!.toJson();
+    }
+    if (jsonapi != null) {
+      data['jsonapi'] = jsonapi!.toJson();
+    }
+    return data;
+  }
 }
 
 class Data {
@@ -60,7 +75,7 @@ class Attributes {
   String? createdAt;
   int? status;
   String? fiberCode;
-  Null deletedAt;
+  String? deletedAt;
   String? userId;
   String? updatedAt;
 

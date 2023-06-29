@@ -1,4 +1,5 @@
 import 'package:camera_app/auth/auth_model.dart';
+import 'package:camera_app/model/model_camera.dart';
 import 'package:camera_app/service/api_base.dart';
 
 class AuthService {
@@ -14,15 +15,15 @@ class AuthService {
     return AuthModel.fromJson(res);
   }
 
-  Future<AuthModel> getcamera(data) async {
+  Future<CameraModel> getcamera(data) async {
     final res =
         await _dioAuth.get('/api/vshome/device_users', queryParameters: data);
-    return AuthModel.fromJson(res);
+    return CameraModel.fromJson(res);
   }
 
-  Future<AuthModel> createcamera(data) async {
+  Future<CameraModel> createcamera(data) async {
     final res = await _dioAuth.post('/api/vshome/device_users',
         queryParameters: data);
-    return AuthModel.fromJson(res);
+    return CameraModel.fromJson(res);
   }
 }

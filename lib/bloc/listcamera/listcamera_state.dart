@@ -1,28 +1,29 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:camera_app/model/model_camera.dart';
 import 'package:equatable/equatable.dart';
 
-abstract class CameraState extends Equatable {
-  const CameraState();
+abstract class ListCameraState extends Equatable {
+  const ListCameraState();
 
   @override
   List<Object> get props => [];
 }
 
-class CameraInitial extends CameraState {}
+class ListCameraInitial extends ListCameraState {}
 
-class CameraLoading extends CameraState {}
+class ListCameraLoading extends ListCameraState {}
 
-class CameraSuccess extends CameraState {
-  
+class ListCameraLoaded extends ListCameraState {
+  final List<Attributes> cameraList;
+  ListCameraLoaded(this.cameraList);
 }
 
-class CameraFailure extends CameraState {
+class ListCameraFailure extends ListCameraState {
   final String errorMessage;
-
-  CameraFailure({
+  ListCameraFailure({
     required this.errorMessage,
   });
-  
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [errorMessage];
 }

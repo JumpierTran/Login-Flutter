@@ -35,7 +35,7 @@ class RouterFluro {
     fluroRouter.define("/dashboard",
         handler: screenCameraPageHandler,
         transitionType: TransitionType.fadeIn);
-    fluroRouter.define('/devices',
+    fluroRouter.define('/images',
         handler: screenDetailCameraHandler,
         transitionType: TransitionType.fadeIn);
   }

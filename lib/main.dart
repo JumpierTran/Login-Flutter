@@ -1,3 +1,4 @@
+import 'package:camera_app/bloc/listcamera/listcamera_bloc.dart';
 import 'package:camera_app/bloc/login/bloc_login.dart';
 import 'package:camera_app/bloc/register/bloc_register.dart';
 import 'package:camera_app/core/global.dart';
@@ -37,6 +38,7 @@ class _HomePageState extends State<HomePage> {
       providers: [
         Provider<LoginBLoc>(create: (_) => LoginBLoc()),
         Provider<RegisterBloc>(create: (_) => RegisterBloc()),
+        Provider<ListCameraBloc>(create: (_) =>ListCameraBloc())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

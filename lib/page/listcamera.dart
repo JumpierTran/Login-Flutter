@@ -1,4 +1,8 @@
+import 'package:camera_app/bloc/listcamera/listcamera_bloc.dart';
+import 'package:camera_app/bloc/listcamera/listcamera_state.dart';
+import 'package:camera_app/model/model_camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 
 class CameraPage extends StatefulWidget {
@@ -9,6 +13,8 @@ class CameraPage extends StatefulWidget {
 }
 
 class _CameraPageState extends State<CameraPage> {
+  bool isPressed = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,21 +28,52 @@ class _CameraPageState extends State<CameraPage> {
                 children: [
                   IconButton(
                     icon: Icon(Icons.menu),
-                    onPressed: () {},
+                    color: isPressed ? Colors.lightBlue : null,
+                    onPressed: () {
+                      setState(() {
+                        isPressed = !isPressed;
+                      });
+                    },
                     tooltip: "Xem thông tin",
                   ),
                   Expanded(
-                    child: Container(),
+                    child: GestureDetector(
+                      onTap: () {
+                        // Xử lý khi nhấp vào ô tìm kiếm
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8.0),
+                          color: Colors.grey[200],
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.search,
+                              color: Colors.lightBlue.withOpacity(0.8),
+                            ),
+                            SizedBox(width: 8.0),
+                            Expanded(
+                              child: TextField(
+                                decoration: InputDecoration.collapsed(
+                                    hintText: "Tìm kiếm Camera",
+                                    hintStyle: TextStyle(
+                                        fontSize: 16.0,
+                                        color:
+                                            Colors.lightBlue.withOpacity(0.8))),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                  IconButton(
-                    icon: Icon(Icons.search),
-                    onPressed: () {},
-                  ),
-                  SizedBox(width: 25),
+                  // SizedBox(width: 25),
                   IconButton(
                     icon: Icon(IconlyLight.logout),
                     onPressed: () {
-                      Navigator.pushNamed(context, "/login");
+                      // Navigator.pushNamed(context, "");
                     },
                   ),
                 ],
@@ -50,42 +87,92 @@ class _CameraPageState extends State<CameraPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Phổ biến',
-                        style:
-                            TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 16)),
                     Text('Xem tất cả',
-                        style:
-                            TextStyle(fontWeight: FontWeight.w500, fontSize: 16))
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 16))
                   ],
                 ),
               ),
             ),
             Expanded(
-                child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 5,
-                        childAspectRatio: 0.79),
-                    itemCount: 4,
-                    itemBuilder: (context, index) {
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.black12,
-                                  borderRadius: BorderRadius.circular(30)),
-                              width: 180,
-                              child: Image.asset("assets/image/air-conditioner.png",height: 50,width: 50,),
-                            ),
-                          ),
-                          Text('Camera',style: TextStyle(fontSize: 18),),
-                        ],
-                      );
-                    }))
+                child: BlocConsumer<ListCameraBloc, ListCameraState>(
+                    listener: (context, state) {
+              if (state is ListCameraFailure) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text(state.errorMessage)));
+              }
+            }, builder: (context, state) {
+              if (state is ListCameraInitial) {
+                return _buildLoading();
+              } else if (state is ListCameraLoading) {
+                return _buildLoading();
+              } else if (state is ListCameraLoaded) {
+                return _buildListCamera(context, state.cameraList as Data);
+              } else if (state is ListCameraFailure) {
+                return Text(
+                    'Lỗi không lấy được danh sách camera${state.errorMessage}');
+              } else {
+                return Text(
+                  "Default UI",
+                  style: TextStyle(color: Colors.lightBlue.withOpacity(0.8)),
+                );
+              }
+            }))
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildListCamera(BuildContext context, Data modelAttribute) {
+    return GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, crossAxisSpacing: 5, childAspectRatio: 0.79),
+        itemCount: modelAttribute.id!.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, "/images");
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text("Devices_id: ${modelAttribute.attributes!.deviceId}",
+                        style: TextStyle(
+                            fontSize: 17, fontWeight: FontWeight.bold)),
+                    Text("User_id ${modelAttribute.attributes!.userId}",
+                        style: TextStyle(
+                            fontSize: 17, fontWeight: FontWeight.bold)),
+                  ],
+                ),
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.lightBlue.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(10)),
+                    width: 180,
+                    height: 10,
+                    child: Image.asset(
+                      "assets/image/camera_visitor.png",
+                      height: 50,
+                      width: 50,
+                      color: Colors.black.withOpacity(0.7),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
+  Widget _buildLoading() {
+    return Center(
+      child: CircularProgressIndicator(),
     );
   }
 }

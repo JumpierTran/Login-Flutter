@@ -1,7 +1,6 @@
 import 'package:camera_app/bloc/login/event_login.dart';
 import 'package:camera_app/bloc/login/state_login.dart';
 import 'package:camera_app/service/auth_service.dart';
-import 'package:camera_app/service/sessionmanager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,7 +12,6 @@ class LoginBLoc extends Bloc<LoginEvent, LoginState> {
     on<PhoneEvent>(_phoneEvent);
     on<PasswordEvent>(_passwordEvent);
     on<LoginButtonPressed>(_loginButtonPressed);
-    on<LogoutButtonPressed>(_logoutButtonPressed);
   }
 
   void _phoneEvent(PhoneEvent event, Emitter<LoginState> emit) {
@@ -40,27 +38,9 @@ class LoginBLoc extends Bloc<LoginEvent, LoginState> {
         emit(LoginFailure('Lỗi đăng nhập không thành công'));
       }
     } catch (e) {
-      emit(LoginFailure("Lỗi kết nối $e"));
+      emit(LoginFailure("Lỗi kết nối $e hoặc tài khoản không tồn tại"));
     }
-
-    // if (response.session != null) {
-    //   Navigator.pushReplacementNamed(context!, '/dashboard');
-    //   emit(LoginSuccess());
-    //   print(response);
-    // } else {
-    //   emit(LoginFailure('Lỗi đăng nhập không thành công'));
-    // }
-    // } catch (e) {
-    //   inspect(e);
-    //   emit(LoginFailure('lỗi kết nối $e'));
-    // }
   }
 
-  void _logoutButtonPressed(
-      LogoutButtonPressed event, Emitter<LogoutButtonPressed> emit) async {
-        if(event is LogoutButtonPressed){
-
-        await SessionManager.clearSession();
-        }
-  }
+  
 }

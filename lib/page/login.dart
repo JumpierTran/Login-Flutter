@@ -216,9 +216,9 @@ class _HomeLoginPageState extends State<HomeLoginPage> {
           'Chính sách bảo mật',
           style: TextStyle(
               fontSize: 20,
-              color: Colors.black.withOpacity(0.8),
+              color: Colors.blue.withOpacity(0.5),
               fontFamily: 'Roboto',
-              fontWeight: FontWeight.w600
+              fontWeight: FontWeight.bold
               // decoration: TextDecoration.underline
               ),
         ),

@@ -28,10 +28,10 @@ class LoginButtonPressed extends LoginEvent {
   List<Object> get props => [phone, password];
 }
 
-class LogoutButtonPressed extends LoginEvent {
-  final String session;
+// class LogoutButtonPressed extends LoginEvent {
+//   final String session;
 
-  LogoutButtonPressed(this.session);
-  @override
-  List<Object?> get props => [session];
-}
+//   LogoutButtonPressed(this.session);
+//   @override
+//   List<Object?> get props => [session];
+// }
