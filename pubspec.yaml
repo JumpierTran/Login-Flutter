@@ -20,6 +20,7 @@ dependencies:
   equatable: ^2.0.5
   iconly: ^1.0.1
   google_fonts: ^5.0.0
+  video_player: ^2.7.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

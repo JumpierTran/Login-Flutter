@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:camera_app/bloc/listcamera/listcamera_bloc.dart';
 import 'package:camera_app/bloc/listcamera/listcamera_state.dart';
 import 'package:camera_app/model/model_camera.dart';
+import 'package:camera_app/service/sessionmanager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
@@ -33,6 +36,8 @@ class _CameraPageState extends State<CameraPage> {
                       setState(() {
                         isPressed = !isPressed;
                       });
+
+                      Navigator.pushNamed(context, '/images');
                     },
                     tooltip: "Xem thông tin",
                   ),
@@ -73,7 +78,9 @@ class _CameraPageState extends State<CameraPage> {
                   IconButton(
                     icon: Icon(IconlyLight.logout),
                     onPressed: () {
-                      // Navigator.pushNamed(context, "");
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, "/login", (route) => false);
+                      SessionManager.clearSession();
                     },
                   ),
                 ],
@@ -104,15 +111,16 @@ class _CameraPageState extends State<CameraPage> {
                     .showSnackBar(SnackBar(content: Text(state.errorMessage)));
               }
             }, builder: (context, state) {
-              if (state is ListCameraInitial) {
-                return _buildLoading();
-              } else if (state is ListCameraLoading) {
+              if (state is ListCameraLoading) {
                 return _buildLoading();
               } else if (state is ListCameraLoaded) {
-                return _buildListCamera(context, state.cameraList as Data);
+                return _buildListCamera(
+                    context, state.cameraList as CameraModel);
               } else if (state is ListCameraFailure) {
-                return Text(
-                    'Lỗi không lấy được danh sách camera${state.errorMessage}');
+                return Center(
+                  child: Text(
+                      'Lỗi không lấy được danh sách camera${state.errorMessage}'),
+                );
               } else {
                 return Text(
                   "Default UI",
@@ -126,11 +134,11 @@ class _CameraPageState extends State<CameraPage> {
     );
   }
 
-  Widget _buildListCamera(BuildContext context, Data modelAttribute) {
+  Widget _buildListCamera(BuildContext context, CameraModel modelAttribute) {
     return GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2, crossAxisSpacing: 5, childAspectRatio: 0.79),
-        itemCount: modelAttribute.id!.length,
+        itemCount: modelAttribute.data!.length,
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
@@ -141,10 +149,12 @@ class _CameraPageState extends State<CameraPage> {
               children: [
                 Row(
                   children: [
-                    Text("Devices_id: ${modelAttribute.attributes!.deviceId}",
+                    Text(
+                        "Devices_id: ${modelAttribute.data![index].attributes!.deviceId}",
                         style: TextStyle(
                             fontSize: 17, fontWeight: FontWeight.bold)),
-                    Text("User_id ${modelAttribute.attributes!.userId}",
+                    Text(
+                        "User_id ${modelAttribute.data![index].attributes!.userId}",
                         style: TextStyle(
                             fontSize: 17, fontWeight: FontWeight.bold)),
                   ],

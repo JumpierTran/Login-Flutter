@@ -7,11 +7,4 @@ abstract class ListCameraEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetListCamera extends ListCameraEvent {
-  
-
-  GetListCamera();
-
-  @override
-  List<Object> get props => [];
-}
+class GetListCamera extends ListCameraEvent {}  
