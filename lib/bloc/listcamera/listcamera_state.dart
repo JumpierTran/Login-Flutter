@@ -1,7 +1,12 @@
 import 'package:camera_app/model/model_camera.dart';
 import 'package:equatable/equatable.dart';
 
-abstract class ListCameraState extends Equatable {}
+abstract class ListCameraState extends Equatable {
+  const ListCameraState();
+
+  @override
+  List<Object> get props => [];
+}
 
 // class ListCameraInitial extends ListCameraState {
 //   @override
@@ -10,7 +15,7 @@ abstract class ListCameraState extends Equatable {}
 
 class ListCameraLoading extends ListCameraState {
   @override
-  List<Object?> get props => [];
+  List<Object> get props => [];
 }
 
 class ListCameraLoaded extends ListCameraState {
@@ -18,7 +23,7 @@ class ListCameraLoaded extends ListCameraState {
   ListCameraLoaded(this.cameraList);
 
   @override
-  List<Object?> get props => [cameraList];
+  List<Object> get props => [cameraList];
 }
 
 class ListCameraFailure extends ListCameraState {
@@ -28,5 +33,5 @@ class ListCameraFailure extends ListCameraState {
   });
 
   @override
-  List<Object?> get props => [errorMessage];
+  List<Object> get props => [errorMessage];
 }

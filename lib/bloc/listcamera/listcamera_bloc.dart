@@ -1,7 +1,6 @@
 import 'package:camera_app/bloc/listcamera/listcamera_event.dart';
 import 'package:camera_app/bloc/listcamera/listcamera_state.dart';
 import 'package:camera_app/model/model_camera.dart';
-import 'package:camera_app/model/model_camera.dart';
 import 'package:camera_app/service/auth_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
