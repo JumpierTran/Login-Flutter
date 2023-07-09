@@ -1,37 +1,19 @@
 import 'package:camera_app/model/model_camera.dart';
 import 'package:equatable/equatable.dart';
 
-abstract class ListCameraState extends Equatable {
-  const ListCameraState();
+enum ListCameraStatus { init, success, fail }
+
+class ListCameraState extends Equatable {
+  final ListCameraStatus status;
+  final List<CameraModel> data;
+
+  ListCameraState({this.status = ListCameraStatus.init, this.data = const []});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [status, data];
+
+  ListCameraState copyWith({ListCameraStatus? status, List<CameraModel>? data}) {
+    return ListCameraState(data: data ?? this.data,status: status ?? this.status);
+  }
 }
 
-// class ListCameraInitial extends ListCameraState {
-//   @override
-//   List<Object> get props => [];
-// }
-
-class ListCameraLoading extends ListCameraState {
-  @override
-  List<Object> get props => [];
-}
-
-class ListCameraLoaded extends ListCameraState {
-  final List<CameraModel> cameraList;
-  ListCameraLoaded(this.cameraList);
-
-  @override
-  List<Object> get props => [cameraList];
-}
-
-class ListCameraFailure extends ListCameraState {
-  final String errorMessage;
-  ListCameraFailure({
-    required this.errorMessage,
-  });
-
-  @override
-  List<Object> get props => [errorMessage];
-}

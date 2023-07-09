@@ -1,5 +1,6 @@
 import 'package:camera_app/bloc/login/event_login.dart';
 import 'package:camera_app/bloc/login/state_login.dart';
+import 'package:camera_app/core/global.dart';
 import 'package:camera_app/service/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,6 +34,7 @@ class LoginBLoc extends Bloc<LoginEvent, LoginState> {
       };
       final response = await _authService.login(data);
       if (response.session != null) {
+        Global.session = response.session?.key ?? '';
         emit(LoginSuccess());
       } else {
         emit(LoginFailure('Lỗi đăng nhập không thành công'));
@@ -41,6 +43,4 @@ class LoginBLoc extends Bloc<LoginEvent, LoginState> {
       emit(LoginFailure("Lỗi kết nối $e hoặc tài khoản không tồn tại"));
     }
   }
-
-  
 }

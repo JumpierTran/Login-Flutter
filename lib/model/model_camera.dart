@@ -1,51 +1,51 @@
+// class CameraModel {
+//   List<Data>? data;
+//   Links? links;
+//   Meta? meta;
+//   Jsonapi? jsonapi;
+
+//   CameraModel({this.data, this.links, this.meta, this.jsonapi});
+
+//   CameraModel.fromJson(Map<String, dynamic> json) {
+//     if (json['data'] != null) {
+//       data = <Data>[];
+//       json['data'].forEach((v) {
+//         data!.add(Data.fromJson(v));
+//       });
+//     }
+//     links = json['links'] != null ? Links.fromJson(json['links']) : null;
+//     meta = json['meta'] != null ? Meta.fromJson(json['meta']) : null;
+//     jsonapi =
+//         json['jsonapi'] != null ? Jsonapi.fromJson(json['jsonapi']) : null;
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = <String, dynamic>{};
+//     if (this.data != null) {
+//       data['data'] = this.data!.map((v) => v.toJson()).toList();
+//     }
+//     if (links != null) {
+//       data['links'] = links!.toJson();
+//     }
+//     if (meta != null) {
+//       data['meta'] = meta!.toJson();
+//     }
+//     if (jsonapi != null) {
+//       data['jsonapi'] = jsonapi!.toJson();
+//     }
+//     return data;
+//   }
+// }
+
 class CameraModel {
-  List<Data>? data;
-  Links? links;
-  Meta? meta;
-  Jsonapi? jsonapi;
-
-  CameraModel({this.data, this.links, this.meta, this.jsonapi});
-
-  CameraModel.fromJson(Map<String, dynamic> json) {
-    if (json['data'] != null) {
-      data = <Data>[];
-      json['data'].forEach((v) {
-        data!.add(Data.fromJson(v));
-      });
-    }
-    links = json['links'] != null ? Links.fromJson(json['links']) : null;
-    meta = json['meta'] != null ? Meta.fromJson(json['meta']) : null;
-    jsonapi =
-        json['jsonapi'] != null ? Jsonapi.fromJson(json['jsonapi']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
-    }
-    if (links != null) {
-      data['links'] = links!.toJson();
-    }
-    if (meta != null) {
-      data['meta'] = meta!.toJson();
-    }
-    if (jsonapi != null) {
-      data['jsonapi'] = jsonapi!.toJson();
-    }
-    return data;
-  }
-}
-
-class Data {
   String? type;
   Attributes? attributes;
   String? id;
   Links? links;
 
-  Data({this.type, this.attributes, this.id, this.links});
+  CameraModel({this.type, this.attributes, this.id, this.links});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  CameraModel.fromJson(Map<String, dynamic> json) {
     type = json['type'];
     attributes = json['attributes'] != null
         ? Attributes.fromJson(json['attributes'])

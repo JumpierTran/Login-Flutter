@@ -7,4 +7,6 @@ abstract class DetailCameraEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class SeeDetailCameraEvent extends DetailCameraEvent {}
+
 

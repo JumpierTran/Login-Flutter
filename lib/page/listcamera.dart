@@ -1,6 +1,8 @@
 import 'package:camera_app/bloc/listcamera/listcamera_bloc.dart';
+import 'package:camera_app/bloc/listcamera/listcamera_event.dart';
 import 'package:camera_app/bloc/listcamera/listcamera_state.dart';
 import 'package:camera_app/model/model_camera.dart';
+import 'package:camera_app/page/video.dart';
 import 'package:camera_app/service/sessionmanager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -102,41 +104,50 @@ class _CameraPageState extends State<CameraPage> {
               ),
             ),
             Expanded(
-                child: BlocConsumer<ListCameraBloc, ListCameraState>(
-                    listener: (context, state) {
-              if (state is ListCameraFailure) {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text(state.errorMessage)));
-              }
-            }, builder: (context, state) {
-              if (state is ListCameraLoading) {
-                return _buildLoading();
-              } else if (state is ListCameraLoaded) {
-                return _buildListCamera(
-                    context, state.cameraList as CameraModel);
-              } else if (state is ListCameraFailure) {
-                return Center(
-                  child: Text(
-                      'Lỗi không lấy được danh sách camera${state.errorMessage}'),
-                );
-              } else {
-                return Text(
-                  "Default UI",
-                  style: TextStyle(color: Colors.lightBlue.withOpacity(0.8)),
-                );
-              }
-            }))
+                child: BlocProvider<ListCameraBloc>(
+              create: (_) => ListCameraBloc()..add(GetListCamera()),
+              child: BlocBuilder<ListCameraBloc, ListCameraState>(
+                builder: (context, state) {
+                  switch (state.status) {
+                    case ListCameraStatus.init:
+                      return _buildLoading();
+                    case ListCameraStatus.fail:
+                      return Text('Fail');
+
+                    default:
+                      return _buildListCamera(context, state.data);
+                  }
+                },
+                // if (state is ListCameraLoading) {
+                //   return _buildLoading();
+                // } else if (state is ListCameraLoaded) {
+                //   return _buildListCamera(
+                //       context, state.cameraList as CameraModel);
+                // } else if (state is ListCameraFailure) {
+                //   return Center(
+                //     child: Text(
+                //         'Lỗi không lấy được danh sách camera${state.errorMessage}'),
+                //   );
+                // } else {
+                //   return Text(
+                //     "Default UI",
+                //     style: TextStyle(color: Colors.lightBlue.withOpacity(0.8)),
+                //   );
+                // }
+                // }
+              ),
+            ))
           ],
         ),
       ),
     );
   }
 
-  Widget _buildListCamera(BuildContext context, CameraModel modelAttribute) {
+  Widget _buildListCamera(BuildContext context, List<CameraModel> data) {
     return GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2, crossAxisSpacing: 5, childAspectRatio: 0.79),
-        itemCount: modelAttribute.data!.length,
+        itemCount: data.length,
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
@@ -145,32 +156,21 @@ class _CameraPageState extends State<CameraPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Text(
-                        "Devices_id: ${modelAttribute.data![index].attributes!.deviceId}",
+                  
+                    Text("Video${data[index].attributes?.deviceId ?? ''}",
                         style: TextStyle(
                             fontSize: 17, fontWeight: FontWeight.bold)),
-                    Text(
-                        "User_id ${modelAttribute.data![index].attributes!.userId}",
+                    Text("User${data[index].attributes?.userId ?? ''}",
                         style: TextStyle(
                             fontSize: 17, fontWeight: FontWeight.bold)),
-                  ],
-                ),
                 Expanded(
                   child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.lightBlue.withOpacity(0.8),
-                        borderRadius: BorderRadius.circular(10)),
-                    width: 180,
-                    height: 10,
-                    child: Image.asset(
-                      "assets/image/camera_visitor.png",
-                      height: 50,
-                      width: 50,
-                      color: Colors.black.withOpacity(0.7),
-                    ),
-                  ),
+                      decoration: BoxDecoration(
+                          color: Colors.lightBlue.withOpacity(0.8),
+                          borderRadius: BorderRadius.circular(10)),
+                      width: 180,
+                      height: 10,
+                      child: VideoTest()),
                 ),
               ],
             ),

@@ -15,15 +15,19 @@ class AuthService {
     return AuthModel.fromJson(res);
   }
 
-  Future<CameraModel> getcamera(data) async {
-    final res =
-        await _dioAuth.get('/api/vshome/device_users', queryParameters: data);
-    return CameraModel.fromJson(res);
+  Future<List<CameraModel>> getcamera() async {
+    List<CameraModel> camera = [];
+    final res = await _dioAuth.get('/me/devices');
+
+    res['data'].forEach((e) {
+      camera.add(CameraModel.fromJson(res));
+    });
+    return camera;
   }
 
   Future<CameraModel> createcamera(data) async {
-    final res = await _dioAuth.post('/api/vshome/device_users',
-        queryParameters: data);
+    final res =
+        await _dioAuth.post('/api/vshome/device_users', queryParameters: data);
     return CameraModel.fromJson(res);
   }
 }

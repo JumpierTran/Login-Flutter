@@ -1,21 +1,19 @@
 import 'package:equatable/equatable.dart';
 
-abstract class DetailCameraState extends Equatable {
-  const DetailCameraState();
+enum DetailCameraStatus { init, success, fail }
+
+class DetailCameraState extends Equatable {
+  final DetailCameraStatus status;
+  final List<DetailCameraState> data;
+  const DetailCameraState(
+      {this.status = DetailCameraStatus.init, this.data = const []});
 
   @override
-  List<Object> get props => [];
-}
+  List<Object> get props => [status,data];
 
-class DetailCameraInitial extends DetailCameraState {}
-
-class DetailCameraLoading extends DetailCameraState {}
-
-class DetailCameraSuccess extends DetailCameraState {}
-
-class DetailCameraFailure extends DetailCameraState {
-  final String? errorMessage;
-
-  DetailCameraFailure(this.errorMessage);
-
+  DetailCameraState copyWith(
+      {DetailCameraStatus? status, List<DetailCameraState>? data}) {
+    return DetailCameraState(
+        data: data ?? this.data, status: status ?? this.status);
+  }
 }
